@@ -1,0 +1,26 @@
+#!/bin/sh
+VERSION=1.10.0
+LIBGDX_BASE_PATH=$HOME/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/
+GDX_PATH=`find $LIBGDX_BASE_PATH -name gdx-$VERSION.jar`
+GDX_TOOLS_PATH=`find $LIBGDX_BASE_PATH -name gdx-tools-$VERSION.jar`
+OUT_DIR=../assets/
+
+if [ $# -eq 0 ]
+  then
+    echo "pack.sh: Image dir parameter must be supplied."
+    exit
+fi
+
+target=${1%/}
+
+cp pack.json $target
+
+
+if [ -z "$JAVA_HOME" ]
+then
+	JAVA_CMD=java
+else
+	JAVA_CMD=$JAVA_HOME/bin/java
+fi
+
+$JAVA_CMD -cp $GDX_PATH:$GDX_TOOLS_PATH com.badlogic.gdx.tools.texturepacker.TexturePacker $target $OUT_DIR $target
