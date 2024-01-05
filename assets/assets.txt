@@ -1,0 +1,3 @@
+bg1.atlas
+libgdx.png
+bg1.png
