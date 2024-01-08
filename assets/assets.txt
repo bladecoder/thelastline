@@ -1,3 +1,11 @@
+ui/ui.json
+ui/ui.atlas
+ui/ui.png
+ui/fonts/Roboto-Regular.ttf
+ui/fonts/Ubuntu-M.ttf
+ui/fonts/Remington-Noiseless.ttf
+ui/fonts/Roboto-Thin.ttf
+ui/fonts/Roboto-Black.ttf
 bg1.atlas
 libgdx.png
 bg1.png
