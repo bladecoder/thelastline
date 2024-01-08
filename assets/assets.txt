@@ -7,5 +7,6 @@ ui/fonts/Remington-Noiseless.ttf
 ui/fonts/Roboto-Thin.ttf
 ui/fonts/Roboto-Black.ttf
 bg1.atlas
+tll.properties
 libgdx.png
 bg1.png

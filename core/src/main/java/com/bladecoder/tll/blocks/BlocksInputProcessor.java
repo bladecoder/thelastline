@@ -5,29 +5,43 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
-
+import com.badlogic.gdx.utils.IntSet;
+import com.bladecoder.tll.TLLGame;
 import com.bladecoder.tll.util.EngineLogger;
 
+/**
+ * Handles for keyboard and gamepad input.
+ */
 public class BlocksInputProcessor implements InputProcessor {
 
     private final BlocksGame blocksGame;
 
     private float moveTime = 0;
+    private float gameOverTime = 0;
 
-    private int pressed = -1;
+    private final IntSet pressedButtons = new IntSet();
 
-    public BlocksInputProcessor(BlocksGame blocksGame) {
+    private final TLLGame game;
+
+    public BlocksInputProcessor(TLLGame game, BlocksGame blocksGame) {
         this.blocksGame = blocksGame;
+        this.game = game;
     }
 
     @Override
     public boolean keyDown(int i) {
 
-        if(i ==Input.Keys.ESCAPE)
-            Gdx.app.exit();
+        if(i ==Input.Keys.ESCAPE) {
+            game.setMenuScreen();
+            return true;
+        }
 
         if(blocksGame.isGameOver() || blocksGame.hasWin()) {
-            blocksGame.newGame();
+            if(gameOverTime > 1.0f) {
+                blocksGame.newGame();
+                gameOverTime = 0;
+            }
+
             return false;
         }
 
@@ -107,6 +121,10 @@ public class BlocksInputProcessor implements InputProcessor {
 
     // move left/right while keys pressed and time passed
     public void update(float delta) {
+        if(blocksGame.isGameOver() || blocksGame.hasWin()) {
+            gameOverTime += delta;
+        }
+
         moveTime += delta;
 
         updateButtons();
@@ -134,18 +152,13 @@ public class BlocksInputProcessor implements InputProcessor {
                 boolean p = controller.getButton(buttonCode);
 
                 if (p) {
-                    if (pressed != -1 && buttonCode != pressed) {
-                        buttonUp(controller, pressed);
-                        pressed = -1;
+                    if(!pressedButtons.contains(buttonCode)) {
+                        pressedButtons.add(buttonCode);
+                        buttonDown(controller, buttonCode);
                     }
-
-                    if(pressed == -1) {
-                        pressed = buttonCode;
-                        buttonDown(controller, pressed);
-                    }
-                } else if (buttonCode == pressed) {
-                    buttonUp(controller, pressed);
-                    pressed = -1;
+                } else if (pressedButtons.contains(buttonCode)) {
+                    pressedButtons.remove(buttonCode);
+                    buttonUp(controller, buttonCode);
                 }
             }
         }
@@ -155,7 +168,7 @@ public class BlocksInputProcessor implements InputProcessor {
         EngineLogger.debug(buttonCode + " gamepad button up.");
 
         if (buttonCode == controller.getMapping().buttonStart) {
-            Gdx.app.exit();
+            game.setMenuScreen();
 
             return;
         }
