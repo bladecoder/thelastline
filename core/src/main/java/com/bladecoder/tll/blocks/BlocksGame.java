@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.bladecoder.tll.ui.BladeSkin;
+import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.DPIUtils;
 import com.bladecoder.tll.util.RectangleRenderer;
 
@@ -37,6 +38,7 @@ public class BlocksGame {
     private int points = 0;
     private int lines = 0;
     private int level = 1;
+    private int highScore = 0;
     private boolean softdrop = false;
 
     private boolean win = false;
@@ -49,11 +51,19 @@ public class BlocksGame {
         this.tile = tile;
 
         this.playfield = new PlayField(WIDTH, HEIGHT);
+
+        highScore = Config.getInstance().getPref("highscore", 0);
     }
 
     public void update(float delta) {
         if(isGameOver() || win) {
             return;
+        }
+
+        if(highScore < points) {
+            highScore = points;
+            Config.getInstance().setPref("highscore", highScore);
+            Config.getInstance().savePrefs();
         }
 
         // update tetramino
@@ -126,9 +136,17 @@ public class BlocksGame {
         }
 
         // draw score
-        String scoreStr = "Score\n" + points + "\n\nLines\n" + lines + "\n\nLevel\n" + level;
+        String scoreStr = "Score\n" + points  + "\n\nLines\n" + lines + "\n\nLevel\n" + level;
         textLayout.setText(font, scoreStr, Color.GREEN, 0.0f, Align.center, false);
         font.draw(batch, textLayout, org.x - textLayout.width / 2 - DPIUtils.getMarginSize() * 2, 800);
+
+        // draw high score
+        Color highScoreColor = Color.GREEN;
+        if(highScore == points)
+            highScoreColor = Color.RED;
+
+        textLayout.setText(font, "High Score\n" + highScore, highScoreColor, 0.0f, Align.center, false);
+        font.draw(batch, textLayout, org.x + width * WIDTH + textLayout.width / 2 + DPIUtils.getMarginSize() * 2, 800);
 
         // draw game over or win text
         if (isGameOver() || win ) {
@@ -222,8 +240,16 @@ public class BlocksGame {
     }
 
     private void levelUp() {
-        level++;
+        setLevel(level + 1);
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
         speed = (float) Math.pow(0.8 - (level - 1) * 0.007f, level - 1);
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public boolean hasWin() {

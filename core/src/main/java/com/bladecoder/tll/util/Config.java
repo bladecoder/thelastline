@@ -101,8 +101,22 @@ public final class Config {
 		return prefs.getProperty(name, defaultValue);
 	}
 
+	public int getPref(String name, int defaultValue) {
+		int result = 0;
+
+		try {
+			result = Integer.parseInt(prefs.getProperty(name, String.valueOf(defaultValue)));
+		} catch (Exception e) {
+		}
+
+		return result;
+	}
+
 	public void setPref(String name, String value) {
 		prefs.setProperty(name, value);
+	}
+	public void setPref(String name, int value) {
+		prefs.setProperty(name, value + "");
 	}
 
 	public void savePrefs() {

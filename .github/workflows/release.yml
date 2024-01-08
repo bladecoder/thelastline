@@ -45,21 +45,18 @@ jobs:
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.
         run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            rm -fo ~/.gradle/caches/modules-2/modules-2.lock
+            rm -fo ~/.gradle/caches/modules-2/gc.properties
+          else
+            rm -f ~/.gradle/caches/modules-2/modules-2.lock
+            rm -f ~/.gradle/caches/modules-2/gc.properties
+          fi
       - name: Upload app image to Github release
         run: |
-          echo ---
-          ls lwjgl3/build/jpackage/
-          echo ---
           staging="thelastline-${{github.event.release.tag_name}}-${{ matrix.platform }}"
           mkdir "$staging"
           cp -r lwjgl3/build/jpackage/${{ matrix.exec }} "$staging/"
-          
-          echo ---
-          ls "$staging/"
-          echo ---
-          
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             7z a "$staging.zip" "$staging"
             gh release upload ${{github.event.release.tag_name}} "$staging.zip"

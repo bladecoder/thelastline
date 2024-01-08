@@ -14,6 +14,8 @@ public class TLLGame extends Game {
     private static final String SKIN_FILENAME = "ui/ui.json";
     private BlocksScreen blocksScreen;
 
+    private MenuScreen menuScreen;
+
     private BladeSkin skin;
 
     public BladeSkin getSkin() {
@@ -25,11 +27,22 @@ public class TLLGame extends Game {
         loadAssets();
 
         blocksScreen = new BlocksScreen(this);
-        setScreen(blocksScreen);
+        menuScreen = new MenuScreen(this);
 
         EngineLogger.setDebug();
         EngineLogger.debug("TLLGame created");
         EngineLogger.debug("Controllers: " + Controllers.getControllers().size);
+
+        setMenuScreen();
+    }
+
+    public void setMenuScreen() {
+        setScreen(new MenuScreen(this));
+    }
+
+    public void setBlocksScreen(int startLevel) {
+        blocksScreen.setStartLevel(startLevel);
+        setScreen(blocksScreen);
     }
 
     @Override

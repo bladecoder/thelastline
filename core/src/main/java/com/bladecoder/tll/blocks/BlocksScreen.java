@@ -22,6 +22,8 @@ public class BlocksScreen implements Screen {
 
     private BlocksInputProcessor inputProcessor;
 
+    private int startLevel = 1;
+
     public BlocksScreen(TLLGame game) {
         this.game = game;
     }
@@ -34,8 +36,10 @@ public class BlocksScreen implements Screen {
         tile = atlas.findRegion("tile");
         viewport = new FitViewport(1920, 1080);
         blocksGame = new BlocksGame(batch, tile, game.getSkin());
-        inputProcessor = new BlocksInputProcessor(blocksGame);
+        inputProcessor = new BlocksInputProcessor(game, blocksGame);
         Gdx.input.setInputProcessor(inputProcessor);
+
+        blocksGame.setLevel(startLevel);
     }
 
     @Override
@@ -77,5 +81,9 @@ public class BlocksScreen implements Screen {
     public void dispose() {
         batch.dispose();
         atlas.dispose();
+    }
+
+    public void setStartLevel(int startLevel) {
+        this.startLevel = startLevel;
     }
 }
