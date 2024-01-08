@@ -1,4 +1,4 @@
-package com.bladecoder.tll;
+package com.bladecoder.tll.blocks;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -222,7 +222,7 @@ public class Tetramino {
         return pos;
     }
 
-    public void render(float delta, SpriteBatch batch, TextureAtlas.AtlasRegion tile, Vector2 org) {
+    public void render(SpriteBatch batch, TextureAtlas.AtlasRegion tile, Vector2 org) {
         float width = tile.getRegionWidth();
         float height = tile.getRegionHeight();
 
