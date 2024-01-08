@@ -1,0 +1,72 @@
+name: Upload Release Asset
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  create-release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        build: [ linux, windows, macos ]
+        include:
+          - build: linux
+            os: ubuntu-latest
+            exec: thelastline
+            platform: x86_64-linux
+          - build: macos
+            os: macos-latest
+            exec: thelastline.app
+            platform: x86_64-macos
+          - build: windows
+            os: windows-latest
+            exec: thelastline
+            platform: x86_64-windows
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-          
+      - name: Build with Gradle
+        run: ./gradlew lwjgl3:jpackageImage
+      - name: Cleanup Gradle Cache
+        # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
+        # Restoring these files from a GitHub Actions cache might cause problems for future builds.
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
+      - name: Upload app image to Github release
+        run: |
+          echo ---
+          ls lwjgl3/build/jpackage/
+          echo ---
+          staging="thelastline-${{github.event.release.tag_name}}-${{ matrix.platform }}"
+          mkdir "$staging"
+          cp -r lwjgl3/build/jpackage/${{ matrix.exec }} "$staging/"
+          
+          echo ---
+          ls "$staging/"
+          echo ---
+          
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            7z a "$staging.zip" "$staging"
+            gh release upload ${{github.event.release.tag_name}} "$staging.zip"
+          else
+            tar czf "$staging.tar.gz" "$staging"
+            gh release upload ${{github.event.release.tag_name}} "$staging.tar.gz"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+        shell: bash
