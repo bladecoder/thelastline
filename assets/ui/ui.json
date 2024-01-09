@@ -9,6 +9,7 @@ BitmapFont: {
 	credits-title: {file: fonts/Ubuntu-M.ttf, size: 20},
 	credits: {file: fonts/Ubuntu-M.ttf, size: 30},
 	story-font: {file: fonts/Remington-Noiseless.ttf, size: 20},
+	menu-font: {file: fonts/Remington-Noiseless.ttf, size: 25}
 },
 
 
@@ -22,7 +23,9 @@ Color: {
 	black-trans:  { r: 0.6, g: 0.6, b: 0.6, a: 1 },
 	white-trans:  {  r: 1, g: 1, b: 1, a: 0.8 },
 	white-trans2:  {  r: 1, g: 1, b: 1, a: 0.4 },
-	yellow:  { r: 1, g: 1, b: 0.13, a: 1 }
+	yellow:  { r: 1, g: 1, b: 0.13, a: 1 },
+	green:  { r: 0, g: 1, b: 0, a: 1 },
+	dark-green:  { r: 0, g: 0.5, b: 0, a: 1 }
 },
 
 
@@ -54,7 +57,7 @@ TintedDrawable: {
 	dialog-up-down: {name:dialog_up, color: black},
 	dialog-up-over: {name:dialog_up, color: white-trans},
 	dialog-down-down: {name:dialog_down, color: black},
-	dialog-down-over: {name:dialog_down, color: white-trans},
+	dialog-down-over: {name:dialog_down, color: white-trans}
 },
 
 ButtonStyle: {
@@ -75,16 +78,16 @@ TextButtonStyle: {
 		font: debug,
 		up: grey,
 		fontColor: white,
-		overFontColor: yellow,
+		overFontColor: green,
 		downFontColor: grey,
 		disabledFontColor: dark-grey
 	},
 
 	menu: {
-		font: big-font,
-		fontColor: white,
-		downFontColor: black,
-		overFontColor: yellow,
+		font: menu-font,
+		fontColor: dark-green,
+		checkedFontColor: green,
+		downFontColor: white,
 		disabledFontColor: dark-grey
 	},
 
@@ -110,7 +113,7 @@ TextButtonStyle: {
 LabelStyle: {
 	default: { font: default, fontColor: white},
 	debug: { font: debug, fontColor: white},
-	title: { font: big-font, fontColor: white},
+	title: { font: big-font, fontColor: green},
 	ui-dialog: { font: message-font, fontColor: white},
 },
 

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -72,7 +74,9 @@ public class MenuScreen implements Screen {
         level.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                startLevel+=1;
+                if(startLevel < 30)
+                    startLevel+=1;
+
                 level.setText("Level " + startLevel);
             }
         });
@@ -95,7 +99,11 @@ public class MenuScreen implements Screen {
         menuButtonTable.pack();
         stage.addActor(menuButtonTable);
         stage.setKeyboardFocus(menuButtonTable);
-        inputListener = new MenuInputListener(game, menuButtonTable);
+
+        ButtonGroup<Button> menuGroup = new ButtonGroup<>(newGame, level, quit);
+        menuGroup.setMinCheckCount(1);
+
+        inputListener = new MenuInputListener(game, menuGroup);
         menuButtonTable.addListener(inputListener);
     }
 

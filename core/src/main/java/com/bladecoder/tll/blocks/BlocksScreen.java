@@ -39,7 +39,8 @@ public class BlocksScreen implements Screen {
         inputProcessor = new BlocksInputProcessor(game, blocksGame);
         Gdx.input.setInputProcessor(inputProcessor);
 
-        blocksGame.setLevel(startLevel);
+        blocksGame.setStartLevel(startLevel);
+        blocksGame.newGame();
     }
 
     @Override

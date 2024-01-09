@@ -14,10 +14,12 @@ import com.bladecoder.tll.util.EngineLogger;
  */
 public class BlocksInputProcessor implements InputProcessor {
 
+    private static final float DAS_INITIAL_DELAY = 0.26f;
+    private static final float DAS_REPEAT_DELAY = 0.05f;
+
     private final BlocksGame blocksGame;
 
-    private float moveTime = 0;
-    private float gameOverTime = 0;
+    private float moveTime;
 
     private final IntSet pressedButtons = new IntSet();
 
@@ -36,22 +38,13 @@ public class BlocksInputProcessor implements InputProcessor {
             return true;
         }
 
-        if(blocksGame.isGameOver() || blocksGame.hasWin()) {
-            if(gameOverTime > 1.0f) {
-                blocksGame.newGame();
-                gameOverTime = 0;
-            }
-
-            return false;
-        }
-
-        moveTime = 0;
-
         switch (i) {
             case Input.Keys.LEFT:
+                moveTime = DAS_INITIAL_DELAY;
                 blocksGame.moveLeft();
                 break;
             case Input.Keys.RIGHT:
+                moveTime = DAS_INITIAL_DELAY;
                 blocksGame.moveRight();
                 break;
             case Input.Keys.UP:
@@ -77,6 +70,11 @@ public class BlocksInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int i) {
+        if(blocksGame.getState() == BlocksGame.State.GAME_OVER || blocksGame.getState() == BlocksGame.State.WIN) {
+            blocksGame.newGame();
+            return false;
+        }
+
         if(i == Input.Keys.DOWN) {
             blocksGame.setSoftDrop(false);
         }
@@ -121,18 +119,15 @@ public class BlocksInputProcessor implements InputProcessor {
 
     // move left/right while keys pressed and time passed
     public void update(float delta) {
-        if(blocksGame.isGameOver() || blocksGame.hasWin()) {
-            gameOverTime += delta;
-        }
 
-        moveTime += delta;
+        moveTime -= delta;
 
         updateButtons();
 
-        if(moveTime < 0.15f)
+        if(moveTime > 0)
             return;
 
-        moveTime = 0;
+        moveTime = DAS_REPEAT_DELAY;
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             blocksGame.moveLeft();
@@ -173,6 +168,11 @@ public class BlocksInputProcessor implements InputProcessor {
             return;
         }
 
+        if(blocksGame.getState() == BlocksGame.State.GAME_OVER || blocksGame.getState() == BlocksGame.State.WIN) {
+            blocksGame.newGame();
+            return;
+        }
+
         if (buttonCode == controller.getMapping().buttonA) {
             blocksGame.rotateRight();
         } else if (buttonCode == controller.getMapping().buttonB) {
@@ -190,16 +190,11 @@ public class BlocksInputProcessor implements InputProcessor {
     private void buttonDown(Controller controller, int buttonCode) {
         EngineLogger.debug(buttonCode + " gamepad button down.");
 
-        moveTime = 0;
-
-        if(blocksGame.isGameOver() || blocksGame.hasWin()) {
-            blocksGame.newGame();
-            return;
-        }
-
         if (buttonCode == controller.getMapping().buttonDpadRight) {
+            moveTime = DAS_INITIAL_DELAY;
             blocksGame.moveRight();
         } else if (buttonCode == controller.getMapping().buttonDpadLeft) {
+            moveTime = DAS_INITIAL_DELAY;
             blocksGame.moveLeft();
         } else if (buttonCode == controller.getMapping().buttonDpadDown) {
             blocksGame.setSoftDrop(true);
