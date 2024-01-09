@@ -42,16 +42,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew lwjgl3:jpackageImage
       - name: Cleanup Gradle Cache
+        shell: bash
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.
         run: |
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            rm -fo ~/.gradle/caches/modules-2/modules-2.lock
-            rm -fo ~/.gradle/caches/modules-2/gc.properties
-          else
-            rm -f ~/.gradle/caches/modules-2/modules-2.lock
-            rm -f ~/.gradle/caches/modules-2/gc.properties
-          fi
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
       - name: Upload app image to Github release
         run: |
           staging="thelastline-${{github.event.release.tag_name}}-${{ matrix.platform }}"
