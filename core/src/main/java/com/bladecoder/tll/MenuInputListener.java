@@ -1,31 +1,16 @@
-/*******************************************************************************
- * Copyright 2014 Rafael Garcia Moreno.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.bladecoder.tll;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.IntSet;
-import com.badlogic.gdx.utils.Pools;
 import com.bladecoder.tll.util.EngineLogger;
 
 public class MenuInputListener extends InputListener  {
@@ -35,20 +20,13 @@ public class MenuInputListener extends InputListener  {
 
     private final IntSet pressedButtons = new IntSet();
 
-    private int currentButtonIndex = -1;
+    private final ButtonGroup<Button> menu;
 
-    private final Table menu;
-
-    public MenuInputListener(TLLGame game, Table menu) {
+    public MenuInputListener(TLLGame game, ButtonGroup<Button> menu) {
         this.game = game;
         this.menu = menu;
 
-        // set setProgrammaticChangeEvents to all buttons
-        for(Actor a : menu.getChildren()) {
-            if(a instanceof Button) {
-                ((Button)a).setProgrammaticChangeEvents(true);
-            }
-        }
+        selectButton(0);
     }
 
     @Override
@@ -74,11 +52,6 @@ public class MenuInputListener extends InputListener  {
     }
 
     public void update(float delta) {
-        if(currentButtonIndex == -1) {
-            currentButtonIndex = 0;
-            //selectButton(getButton(currentButtonIndex));
-        }
-
         updateButtons();
     }
 
@@ -109,7 +82,7 @@ public class MenuInputListener extends InputListener  {
         if (buttonCode == controller.getMapping().buttonStart) {
             game.setMenuScreen();
         } else if (buttonCode == controller.getMapping().buttonA) {
-            releaseButton(getButton(currentButtonIndex));
+            click();
         } else if (buttonCode == controller.getMapping().buttonStart) {
             game.setBlocksScreen(1);
         } else if (buttonCode == controller.getMapping().buttonDpadUp) {
@@ -119,66 +92,8 @@ public class MenuInputListener extends InputListener  {
         }
     }
 
-    private void click() {
-        clickButton(getButton(currentButtonIndex));
-        releaseButton(getButton(currentButtonIndex));
-    }
-
     private void buttonDown(Controller controller, int buttonCode) {
         EngineLogger.debug(buttonCode + " gamepad button down.");
-        if (buttonCode == controller.getMapping().buttonA) {
-            clickButton(getButton(currentButtonIndex));
-        }
-    }
-
-    /**
-     * Simulate mousing over a button.
-     */
-    private void selectButton(Actor button) {
-        InputEvent event = Pools.obtain(InputEvent.class);
-        event.setType(InputEvent.Type.enter);
-
-        button.fire(event);
-        event.isHandled();
-        Pools.free(event);
-    }
-
-    /**
-     * Simulate mousing off of a button.
-     */
-    private void unselectButton(Actor button) {
-        InputEvent event = Pools.obtain(InputEvent.class);
-        event.setType(InputEvent.Type.exit);
-
-        button.fire(event);
-        event.isHandled();
-        Pools.free(event);
-    }
-
-    /**
-     * Simulate button click down.
-     */
-    private void clickButton(Actor button) {
-        InputEvent event = Pools.obtain(InputEvent.class);
-        event.setType(InputEvent.Type.touchDown);
-        event.setButton(Input.Buttons.LEFT);
-
-        button.fire(event);
-        event.isHandled();
-        Pools.free(event);
-    }
-
-    private Actor getButton(int index) {
-        for(Actor a : menu.getChildren()) {
-            if(a instanceof Button) {
-                if(index == 0)
-                    return a;
-
-                index--;
-            }
-        }
-
-        return null;
     }
 
     private void updateAxis(float delta) {
@@ -190,43 +105,36 @@ public class MenuInputListener extends InputListener  {
 //        }
     }
 
+
+    private Button getButton(int index) {
+        return menu.getButtons().get(index);
+    }
+
     private void up() {
-        if(currentButtonIndex == 0) return;
-        selectButton(currentButtonIndex - 1);
+        if(menu.getCheckedIndex() == 0) return;
+        selectButton(menu.getCheckedIndex() - 1);
     }
 
     private void down() {
-        if(currentButtonIndex == getNumButtons() - 1) return;
-        selectButton(currentButtonIndex + 1);
+        if(menu.getCheckedIndex() == getNumButtons() - 1) return;
+        selectButton(menu.getCheckedIndex() + 1);
     }
 
     private void selectButton(int buttonIndex) {
-        unselectButton(getButton(currentButtonIndex));
-        currentButtonIndex = buttonIndex;
-        selectButton(getButton(currentButtonIndex));
+        getButton(buttonIndex).setChecked(true);
     }
 
     private int getNumButtons() {
-        int numButtons = 0;
-
-        for(Actor a : menu.getChildren()) {
-            if(a instanceof Button)
-                numButtons++;
-        }
-
-        return numButtons;
+        return menu.getButtons().size;
     }
 
-    /**
-     * Simulate button click release.
-     */
-    private void releaseButton(Actor button) {
-        InputEvent event = Pools.obtain(InputEvent.class);
-        event.setType(InputEvent.Type.touchUp);
-        event.setButton(Input.Buttons.LEFT);
+    private void click() {
+       Button b = menu.getChecked();
 
-        button.fire(event);
-        event.isHandled();
-        Pools.free(event);
+       for(EventListener l: b.getListeners()) {
+           if(l instanceof ClickListener) {
+               ((ClickListener)l).clicked(null, 0, 0);
+           }
+       }
     }
 }

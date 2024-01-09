@@ -62,7 +62,7 @@ class PlayField {
         return width;
     }
 
-    void nextTetramino(Tetramino tetramino) {
+    void lockDown(Tetramino tetramino) {
         // copy tetramino to field
         for(int y=0; y< tetramino.getHeight(); y++) {
             for(int x=0; x< tetramino.getWidth(); x++) {
@@ -72,8 +72,6 @@ class PlayField {
                 }
             }
         }
-
-        tetramino.next();
     }
 
     boolean canMoveDown(Tetramino tetramino) {
@@ -87,5 +85,14 @@ class PlayField {
         }
 
         return true;
+    }
+
+    public boolean isSomeRowFull() {
+        for(int y=0; y<height; y++) {
+            if(isRowFull(y))
+                return true;
+        }
+
+        return false;
     }
 }

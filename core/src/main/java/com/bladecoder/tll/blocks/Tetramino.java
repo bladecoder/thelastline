@@ -222,26 +222,11 @@ public class Tetramino {
         return pos;
     }
 
-    public void render(SpriteBatch batch, TextureAtlas.AtlasRegion tile, Vector2 org) {
-        float width = tile.getRegionWidth();
-        float height = tile.getRegionHeight();
+    public int[][] getCurrent() {
+        return current[rotation];
+    }
 
-        for(int y = 0; y< current[rotation].length ; y++) {
-            for(int x = 0; x< current[rotation][y].length; x++) {
-                if(!isFree(x, y)) {
-                    batch.draw(tile, org.x + (pos.x + x) * width, org.y + (pos.y + y) * height);
-                }
-            }
-        }
-
-        // Render the next tetramino
-        int leftAlign = next[0][0].length + 1;
-        for(int y = 0; y< next[0].length ; y++) {
-            for(int x = 0; x< next[0][y].length; x++) {
-                if(next[0][y][x] != 0) {
-                    batch.draw(tile, org.x + (x - leftAlign) * width, org.y + (y + 17) * height);
-                }
-            }
-        }
+    public int[][] getNext() {
+        return next[0];
     }
 }

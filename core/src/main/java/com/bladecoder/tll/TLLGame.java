@@ -37,7 +37,7 @@ public class TLLGame extends Game {
     }
 
     public void setMenuScreen() {
-        setScreen(new MenuScreen(this));
+        setScreen(menuScreen);
     }
 
     public void setBlocksScreen(int startLevel) {
