@@ -1,6 +1,7 @@
 package com.bladecoder.tll;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.bladecoder.tll.blocks.BlocksGame;
 import com.bladecoder.tll.util.DPIUtils;
 
 public class MenuScreen implements Screen {
@@ -74,8 +76,15 @@ public class MenuScreen implements Screen {
         level.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(startLevel < 30)
-                    startLevel+=1;
+                if(event.getButton() == Input.Buttons.RIGHT) {
+                    if(startLevel > 1)
+                        startLevel-=1;
+                    else startLevel = BlocksGame.MAX_LEVEL;
+                } else {
+                    if (startLevel < BlocksGame.MAX_LEVEL)
+                        startLevel += 1;
+                    else startLevel = 1;
+                }
 
                 level.setText("Level " + startLevel);
             }
