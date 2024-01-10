@@ -37,8 +37,11 @@ public class MenuInputListener extends InputListener  {
         } else if(keycode == Input.Keys.DOWN) {
             down();
             return true;
-        } else if(keycode == Input.Keys.ENTER) {
-            click();
+        } else if(keycode == Input.Keys.ENTER || keycode == Input.Keys.RIGHT) {
+            click(false);
+            return true;
+        } else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.LEFT) {
+            click(true);
             return true;
         }  else if (keycode == Input.Keys.ESCAPE) {
             game.setBlocksScreen(1);
@@ -81,8 +84,10 @@ public class MenuInputListener extends InputListener  {
 
         if (buttonCode == controller.getMapping().buttonStart) {
             game.setMenuScreen();
-        } else if (buttonCode == controller.getMapping().buttonA) {
-            click();
+        } else if (buttonCode == controller.getMapping().buttonA || buttonCode == controller.getMapping().buttonDpadRight) {
+            click(false);
+        } else if (buttonCode == controller.getMapping().buttonB || buttonCode == controller.getMapping().buttonDpadLeft) {
+            click(true);
         } else if (buttonCode == controller.getMapping().buttonStart) {
             game.setBlocksScreen(1);
         } else if (buttonCode == controller.getMapping().buttonDpadUp) {
@@ -128,12 +133,15 @@ public class MenuInputListener extends InputListener  {
         return menu.getButtons().size;
     }
 
-    private void click() {
+    private void click(boolean secondaryButton) {
        Button b = menu.getChecked();
 
        for(EventListener l: b.getListeners()) {
            if(l instanceof ClickListener) {
-               ((ClickListener)l).clicked(null, 0, 0);
+               InputEvent event = new InputEvent();
+               event.setButton(secondaryButton ? Input.Buttons.RIGHT : Input.Buttons.LEFT);
+
+               ((ClickListener)l).clicked(event, 0, 0);
            }
        }
     }

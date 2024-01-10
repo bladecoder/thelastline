@@ -28,7 +28,7 @@ public class BlocksGame {
 
     private static final float LINE_CLEAR_TIME = 1f / 60f * 20f; // 20 frames
 
-    private static final int MAX_LEVEL = 30;
+    public static final int MAX_LEVEL = 30;
 
     private final BitmapFont font;
 
