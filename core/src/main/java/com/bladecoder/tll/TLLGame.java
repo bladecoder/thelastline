@@ -6,7 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.bladecoder.tll.blocks.BlocksLogic;
 import com.bladecoder.tll.blocks.BlocksScreen;
+import com.bladecoder.tll.blocks.Theme;
 import com.bladecoder.tll.ui.BladeSkin;
 import com.bladecoder.tll.util.EngineLogger;
 
@@ -40,8 +42,10 @@ public class TLLGame extends Game {
         setScreen(menuScreen);
     }
 
-    public void setBlocksScreen(int startLevel) {
+    public void setBlocksScreen(int startLevel, int gameMode, int theme) {
         blocksScreen.setStartLevel(startLevel);
+        blocksScreen.setGameMode(BlocksLogic.GameMode.values()[gameMode]);
+        blocksScreen.setTheme(Theme.THEMES[theme]);
         setScreen(blocksScreen);
     }
 
@@ -54,5 +58,9 @@ public class TLLGame extends Game {
         FileHandle skinFile = Gdx.files.internal(SKIN_FILENAME);
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(SKIN_FILENAME.substring(0, SKIN_FILENAME.lastIndexOf('.')) + ".atlas"));
         skin = new BladeSkin(skinFile, atlas);
+    }
+
+    public void cont() {
+        setScreen(blocksScreen);
     }
 }

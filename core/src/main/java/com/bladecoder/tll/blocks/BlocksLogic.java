@@ -17,6 +17,12 @@ public class BlocksLogic {
 
     public static final int MAX_LEVEL = 30;
 
+    public enum GameMode {
+        MARATHON
+    }
+
+    private GameMode gameMode = GameMode.MARATHON;
+
     private float moveDownTime = 0;
 
     private float stateTimer = 0; // time used for ARE and line clear
@@ -241,5 +247,9 @@ public class BlocksLogic {
 
     GameState.State getState() {
         return gameState.state;
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
     }
 }

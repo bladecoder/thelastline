@@ -21,7 +21,7 @@ public class BlocksScreen implements Screen {
 
     private int startLevel = 1;
 
-    private final Theme theme = Theme.DEFAULT;
+    private Theme theme = Theme.SUNSET;
 
     private final GameState gameState = new GameState();
     private final BlocksLogic blocksLogic = new BlocksLogic(gameState);
@@ -37,11 +37,9 @@ public class BlocksScreen implements Screen {
     public void show() {
         if(theme.atlas != null) {
             atlas = new TextureAtlas("theme1.atlas");
-            background = atlas.findRegion("background");
-            tile = atlas.findRegion("tile");
         }
 
-        blocksRenderer = new BlocksRenderer(tile, game.getSkin(), gameState, theme);
+        blocksRenderer = new BlocksRenderer(atlas, game.getSkin(), gameState, theme);
         Gdx.input.setInputProcessor(inputProcessor);
 
         blocksLogic.setStartLevel(startLevel);
@@ -82,7 +80,8 @@ public class BlocksScreen implements Screen {
 
     @Override
     public void hide() {
-        atlas.dispose();
+        if(atlas != null)
+            atlas.dispose();
     }
 
     @Override
@@ -92,5 +91,13 @@ public class BlocksScreen implements Screen {
 
     public void setStartLevel(int startLevel) {
         this.startLevel = startLevel;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
+
+    public void setGameMode(BlocksLogic.GameMode gameMode) {
+        blocksLogic.setGameMode(gameMode);
     }
 }
