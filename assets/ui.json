@@ -33,14 +33,12 @@ TintedDrawable: {
 	dark-grey: { name: white_pixel, color: dark-grey},
     light-grey: { name: white_pixel, color: light-grey},
 
-	menu-up: { name: menu, color: white-trans2},
-
 	border-rect-over: { name: border_rect, color: white-trans},
 	border-rect-down: { name: border_rect, color: black},
 },
 
 ButtonStyle: {
-	menu: {up:menu-up, over: menu, down: menu},
+	menu: {up: white, over: white, down: white},
 },
 
 

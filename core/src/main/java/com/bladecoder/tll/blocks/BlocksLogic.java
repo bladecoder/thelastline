@@ -36,10 +36,12 @@ public class BlocksLogic {
     public void update(float delta) {
         if(gameState.paused) return;
 
-        if(gameState.gameMode == GameState.GameMode.ULTRA)
-            gameState.gameTime -= delta;
-        else
-            gameState.gameTime += delta;
+        if(gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN) {
+            if(gameState.gameMode == GameState.GameMode.ULTRA)
+                gameState.gameTime -= delta;
+            else
+                gameState.gameTime += delta;
+        }
 
         switch (gameState.state) {
             case ARE:

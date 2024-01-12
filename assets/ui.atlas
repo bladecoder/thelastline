@@ -1,0 +1,27 @@
+
+ui.png
+size: 50, 29
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+border_black_rect
+  rotate: false
+  xy: 2, 5
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+border_rect
+  rotate: false
+  xy: 26, 5
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+white_pixel
+  rotate: false
+  xy: 2, 2
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

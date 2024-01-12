@@ -13,8 +13,10 @@ fi
 
 target=${1%/}
 
-cp pack.json $target
-
+# copy pack.json if not exists
+if [ ! -f $target/pack.json ]; then
+  cp pack.json $target
+fi
 
 if [ -z "$JAVA_HOME" ]
 then
