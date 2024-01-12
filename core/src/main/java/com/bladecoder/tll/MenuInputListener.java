@@ -44,7 +44,7 @@ public class MenuInputListener extends InputListener  {
             click(true);
             return true;
         }  else if (keycode == Input.Keys.ESCAPE) {
-            game.cont();
+            game.setBlocksScreen();
             return true;
         } else if (keycode == Input.Keys.BACK) {
             Gdx.app.exit();
@@ -83,7 +83,7 @@ public class MenuInputListener extends InputListener  {
         EngineLogger.debug(buttonCode + " gamepad button up.");
 
         if (buttonCode == controller.getMapping().buttonStart) {
-            game.cont();
+            game.setBlocksScreen();
         } else if (buttonCode == controller.getMapping().buttonA || buttonCode == controller.getMapping().buttonDpadRight) {
             click(false);
         } else if (buttonCode == controller.getMapping().buttonB || buttonCode == controller.getMapping().buttonDpadLeft) {

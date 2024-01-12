@@ -34,7 +34,12 @@ public class BlocksLogic {
     }
 
     public void update(float delta) {
-        gameState.gameTime += delta;
+        if(gameState.paused) return;
+
+        if(gameState.gameMode == GameState.GameMode.ULTRA)
+            gameState.gameTime -= delta;
+        else
+            gameState.gameTime += delta;
 
         switch (gameState.state) {
             case ARE:
@@ -119,7 +124,7 @@ public class BlocksLogic {
             updateHighScore();
         }
 
-        if(gameState.gameMode == GameState.GameMode.ULTRA && gameState.gameTime >= 3 * 60) {
+        if(gameState.gameMode == GameState.GameMode.ULTRA && gameState.gameTime <= 0) {
             gameState.state = GameState.State.WIN;
             return;
         }
@@ -210,7 +215,11 @@ public class BlocksLogic {
         // wait 1 second before starting a new game to avoid accidental key press
         if ((gameState.state == GameState.State.GAME_OVER || gameState.state == GameState.State.WIN) && stateTimer < 1.0f) return;
 
-        gameState.gameTime = 0;
+        if(gameState.gameMode == GameState.GameMode.ULTRA)
+            gameState.gameTime = 3 * 60; // 3 minutes
+        else
+            gameState.gameTime = 0;
+
         gameState.points = 0;
         gameState.lines = 0;
         setLevel(startLevel);
@@ -289,5 +298,18 @@ public class BlocksLogic {
                 break;
         }
         Config.getInstance().savePrefs();
+    }
+
+    public void pause() {
+        if(gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN)
+            gameState.paused = true;
+    }
+
+    public void resume() {
+        gameState.paused = false;
+    }
+
+    public boolean isPaused() {
+        return gameState.paused;
     }
 }

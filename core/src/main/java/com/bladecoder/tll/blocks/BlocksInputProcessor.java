@@ -34,6 +34,7 @@ public class BlocksInputProcessor implements InputProcessor {
     public boolean keyDown(int i) {
 
         if(i ==Input.Keys.ESCAPE) {
+            blocksGame.pause();
             game.setMenuScreen();
             return true;
         }
@@ -77,6 +78,11 @@ public class BlocksInputProcessor implements InputProcessor {
 
         if(i == Input.Keys.DOWN) {
             blocksGame.setSoftDrop(false);
+        } else if(i == Input.Keys.P) {
+            if(blocksGame.isPaused())
+                blocksGame.resume();
+            else
+                blocksGame.pause();
         }
 
         return false;

@@ -155,7 +155,7 @@ public class BlocksRenderer {
         }
 
         Color highScoreColor = theme.scoresTextColor;
-        if (gameState.highScore == gameState.points) highScoreColor = Color.RED;
+        if (gameState.highScore <= gameState.points) highScoreColor = Color.RED;
         renderSquareText(batch, posx, posy, size,titleStr, valueStr, highScoreColor);
 
         // draw game mode and time

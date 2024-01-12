@@ -32,6 +32,8 @@ public class GameState {
 
     float gameTime = 0;
 
+    boolean paused = false;
+
     public GameState() {
         this(WIDTH, HEIGHT);
     }
