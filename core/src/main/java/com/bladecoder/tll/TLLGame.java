@@ -15,7 +15,7 @@ import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.EngineLogger;
 
 public class TLLGame extends Game {
-    private static final String SKIN_FILENAME = "ui/ui.json";
+    private static final String SKIN_FILENAME = "ui.json";
     private BlocksScreen blocksScreen;
 
     private MenuScreen menuScreen;

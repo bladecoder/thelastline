@@ -198,7 +198,7 @@ public class BlocksRenderer {
 
         RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
 
-        posx = posx + (size - tileSize * next.length) / 2f;
+        posx = posx + (size - tileSize * next.length) / 2f - borderWidth;
         posy = posy + (size - tileSize * (next.length == 4? 1:2)) / 2f;
 
         for (int y = 0; y < next.length; y++) {

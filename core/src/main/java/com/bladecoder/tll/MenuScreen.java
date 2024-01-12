@@ -22,7 +22,7 @@ import com.bladecoder.tll.util.DPIUtils;
 
 public class MenuScreen implements Screen {
 
-    private static final String[] THEMES = {"DEFAULT", "SUNSET"};
+    private static final String[] THEMES = {"DEFAULT", "MONO", "SUNSET"};
 
     private static final String[] GAME_MODES = {"MARATHON", "SPRINT", "ULTRA"};
 

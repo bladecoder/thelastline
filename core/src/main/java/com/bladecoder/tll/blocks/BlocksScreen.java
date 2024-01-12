@@ -34,7 +34,7 @@ public class BlocksScreen implements Screen {
         theme = Theme.THEMES[Config.getInstance().getPref("theme", 0)];
 
         if(theme.atlas != null) {
-            atlas = new TextureAtlas("theme1.atlas");
+            atlas = new TextureAtlas(theme.atlas);
         }
 
         blocksRenderer = new BlocksRenderer(atlas, game.getSkin(), gameState, theme);
@@ -82,8 +82,10 @@ public class BlocksScreen implements Screen {
 
     @Override
     public void hide() {
-        if(atlas != null)
+        if(atlas != null) {
             atlas.dispose();
+            atlas = null;
+        }
     }
 
     @Override

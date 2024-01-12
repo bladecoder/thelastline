@@ -6,7 +6,9 @@ public class Theme {
     public static final Theme DEFAULT = new Theme();
     public static final Theme SUNSET = createSunsetTheme();
 
-    public static final Theme[] THEMES = {DEFAULT, SUNSET};
+    public static final Theme MONO = createMonoTheme();
+
+    public static final Theme[] THEMES = {DEFAULT, MONO, SUNSET};
 
 
     public Color bgColor = Color.BLACK;
@@ -25,7 +27,7 @@ public class Theme {
     public float borderWidth = 2;
 
     public Color clearLineColor = Color.GREEN;
-    public String atlas; // = "theme1.atlas";
+    public String atlas = null;
 
     private static Theme createSunsetTheme() {
         Color bg = new Color(0x243145ff);
@@ -48,6 +50,32 @@ public class Theme {
         theme.borderWidth = 6;
 
         theme.clearLineColor = accent;
+        theme.atlas = null;
+        return theme;
+    }
+
+    private static Theme createMonoTheme() {
+        Color bg = new Color(0xdddbdeff);
+        Color accent = Color.BLACK;
+
+        Theme theme = new Theme();
+        theme.bgColor = bg;
+        theme.gridColor = null;
+        theme.gridWidth = 2;
+        theme.playfieldColor = null;
+        theme.playfieldBorderColor = accent;
+        theme.scoresTextColor = accent;
+        theme.scoresBgColor = null;
+        theme.scoresBorderColor = null;
+        theme.tileColor = accent;
+        theme.tileBorderColor = new Color(0x142532ff);
+        theme.tileBorderWidth = 4;
+
+        theme.borderWidth = 30;
+
+        theme.clearLineColor = accent;
+
+        theme.atlas = "theme-mono.atlas";
         return theme;
     }
 }

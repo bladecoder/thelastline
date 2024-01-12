@@ -20,7 +20,7 @@ Useful links:
 - Ultra: score as many points as possible within a three-minute time span.
 
 ## TODO
-
+- [ ] Icons
 - [ ] Clean ui.atlas
 - [ ] Mono theme
 - [ ] One theme using texture atlas
@@ -30,6 +30,7 @@ Useful links:
 - [ ] Music
 - [ ] Vertical mode
 - [ ] Menu screen themes
+- [ ] Version and credits on menu screen
 - [ ] Android version
 - [ ] iOS version
 - [?] lines for level up depends on level (see NES)
