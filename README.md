@@ -22,7 +22,7 @@ Useful links:
 ## TODO
 
 - [ ] Clean ui.atlas
-- [ ] Pause/Resume
+- [x] Pause/Resume
 - [ ] Tile color by type
 - [?] lines for level up depends on level (see NES)
 - [ ] Level up animation

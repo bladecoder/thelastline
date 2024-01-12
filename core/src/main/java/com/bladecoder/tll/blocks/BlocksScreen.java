@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bladecoder.tll.TLLGame;
+import com.bladecoder.tll.util.Config;
 
 public class BlocksScreen implements Screen {
 
@@ -16,13 +17,7 @@ public class BlocksScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
 
     private TextureAtlas atlas;
-    private TextureAtlas.AtlasRegion background;
-    private TextureAtlas.AtlasRegion tile;
-
-    private int startLevel = 1;
-    private GameState.GameMode gameMode = GameState.GameMode.MARATHON;
-
-    private Theme theme = Theme.SUNSET;
+    private Theme theme = Theme.DEFAULT;
 
     private final GameState gameState = new GameState();
     private final BlocksLogic blocksLogic = new BlocksLogic(gameState);
@@ -36,6 +31,8 @@ public class BlocksScreen implements Screen {
 
     @Override
     public void show() {
+        theme = Theme.THEMES[Config.getInstance().getPref("theme", 0)];
+
         if(theme.atlas != null) {
             atlas = new TextureAtlas("theme1.atlas");
         }
@@ -43,9 +40,13 @@ public class BlocksScreen implements Screen {
         blocksRenderer = new BlocksRenderer(atlas, game.getSkin(), gameState, theme);
         Gdx.input.setInputProcessor(inputProcessor);
 
-        blocksLogic.setGameMode(gameMode);
-        blocksLogic.setStartLevel(startLevel);
-        blocksLogic.newGame();
+        if(gameState.paused)
+            blocksLogic.resume();
+        else {
+            blocksLogic.setGameMode(GameState.GameMode.values()[Config.getInstance().getPref("gameMode", 0)]);
+            blocksLogic.setStartLevel(Config.getInstance().getPref("startLevel", 1));
+            blocksLogic.newGame();
+        }
     }
 
     @Override
@@ -54,7 +55,6 @@ public class BlocksScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
-        // batch.draw(bg1, 0, 0);
         // for long processing frames, limit delta to 1/30f to avoid skipping animations
         float delta = Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f);
         inputProcessor.update(delta);
@@ -72,12 +72,12 @@ public class BlocksScreen implements Screen {
 
     @Override
     public void pause() {
-
+        blocksLogic.pause();
     }
 
     @Override
     public void resume() {
-
+        blocksLogic.resume();
     }
 
     @Override
@@ -91,15 +91,11 @@ public class BlocksScreen implements Screen {
         batch.dispose();
     }
 
-    public void setStartLevel(int startLevel) {
-        this.startLevel = startLevel;
+    public boolean isPaused() {
+        return gameState.paused;
     }
 
-    public void setTheme(Theme theme) {
-        this.theme = theme;
-    }
-
-    public void setGameMode(GameState.GameMode gameMode) {
-        this.gameMode = gameMode;
+    public void setPaused(boolean paused) {
+        gameState.paused = paused;
     }
 }

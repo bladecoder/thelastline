@@ -11,6 +11,7 @@ import com.bladecoder.tll.blocks.BlocksScreen;
 import com.bladecoder.tll.blocks.GameState;
 import com.bladecoder.tll.blocks.Theme;
 import com.bladecoder.tll.ui.BladeSkin;
+import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.EngineLogger;
 
 public class TLLGame extends Game {
@@ -43,11 +44,16 @@ public class TLLGame extends Game {
         setScreen(menuScreen);
     }
 
-    public void setBlocksScreen(int startLevel, int gameMode, int theme) {
-        blocksScreen.setStartLevel(startLevel);
-        blocksScreen.setGameMode(GameState.GameMode.values()[gameMode]);
-        blocksScreen.setTheme(Theme.THEMES[theme]);
+    public void setBlocksScreen() {
         setScreen(blocksScreen);
+    }
+
+    public boolean isPaused() {
+        return blocksScreen.isPaused();
+    }
+
+    public void setPaused(boolean paused) {
+        blocksScreen.setPaused(paused);
     }
 
     @Override
@@ -59,9 +65,5 @@ public class TLLGame extends Game {
         FileHandle skinFile = Gdx.files.internal(SKIN_FILENAME);
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(SKIN_FILENAME.substring(0, SKIN_FILENAME.lastIndexOf('.')) + ".atlas"));
         skin = new BladeSkin(skinFile, atlas);
-    }
-
-    public void cont() {
-        setScreen(blocksScreen);
     }
 }
