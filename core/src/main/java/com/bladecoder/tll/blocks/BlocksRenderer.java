@@ -15,7 +15,8 @@ public class BlocksRenderer {
 
     private final BitmapFont font;
     private final GlyphLayout textLayout = new GlyphLayout();
-    private final TextureAtlas.AtlasRegion tile;
+    private TextureAtlas.AtlasRegion tile;
+    private TextureAtlas.AtlasRegion background;
     private final Vector2 org = new Vector2();
 
     private final GameState gameState;
@@ -31,17 +32,27 @@ public class BlocksRenderer {
 
     private final Theme theme;
 
+    private float screenWidth;
+    private float screenHeight;
 
-    public BlocksRenderer(TextureAtlas.AtlasRegion tile, BladeSkin skin, GameState gameState, Theme theme) {
+
+    public BlocksRenderer(TextureAtlas atlas, BladeSkin skin, GameState gameState, Theme theme) {
         this.font = skin.getFont("big-font");
-        this.tile = tile;
         this.gameState = gameState;
         this.theme = theme;
+
+        if(atlas != null) {
+            this.background = atlas.findRegion("background");
+            this.tile = atlas.findRegion("tile");
+        }
 
         borderWidth = theme.borderWidth;
     }
 
     public void resize(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
+
         playfieldHeight = height - (int)DPIUtils.getMarginSize() * 2;
 
         tileSize = playfieldHeight / gameState.playfield.getHeight();
@@ -63,6 +74,11 @@ public class BlocksRenderer {
     }
 
     public void render(SpriteBatch batch) {
+
+        // draw background
+        if(background != null) {
+            batch.draw(background, 0, 0, screenWidth, screenHeight);
+        }
 
         // draw playfield border
         RectangleRenderer.draw(batch, org.x - borderWidth, org.y - borderWidth, playfieldWidth + borderWidth * 2, playfieldHeight + borderWidth * 2, theme.playfieldColor, borderWidth, theme.playfieldBorderColor);
@@ -88,7 +104,7 @@ public class BlocksRenderer {
             // draw rectangle in the cleared gameState.lines
             for(int y=0; y<gameState.playfield.getHeight(); y++) {
                 if(gameState.playfield.isRowFull(y)) {
-                    RectangleRenderer.draw(batch, org.x, org.y + y * tileSize, tileSize * gameState.playfield.getWidth(), tileSize, Color.GREEN);
+                    RectangleRenderer.draw(batch, org.x, org.y + y * tileSize, tileSize * gameState.playfield.getWidth(), tileSize, theme.clearLineColor);
                 }
             }
         }
@@ -144,7 +160,7 @@ public class BlocksRenderer {
                     org.y + (playfieldHeight - textLayout.height) / 2 - DPIUtils.getMarginSize() * 2,
                     textLayout.width + DPIUtils.getMarginSize() * 4,
                     textLayout.height + DPIUtils.getMarginSize() * 4,
-                    Color.BLACK);
+                    theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
             font.draw(batch, textLayout,  org.x  + (float)playfieldWidth / 2, org.y + (float) playfieldHeight / 2 + textLayout.height / 2);
         }
     }
@@ -195,12 +211,12 @@ public class BlocksRenderer {
     private void renderGrid(SpriteBatch batch) {
         // Draw horizontal lines
         for (int y = 1; y < gameState.playfield.getHeight(); y++) {
-            RectangleRenderer.draw(batch, org.x, org.y + y * tileSize, playfieldWidth, borderWidth, theme.gridColor);
+            RectangleRenderer.draw(batch, org.x, org.y + y * tileSize, playfieldWidth, theme.gridWidth * scale, theme.gridColor);
         }
 
         // Draw vertical lines
         for (int x = 1; x < gameState.playfield.getWidth(); x++) {
-            RectangleRenderer.draw(batch, org.x + x * tileSize, org.y, borderWidth, playfieldHeight, theme.gridColor);
+            RectangleRenderer.draw(batch, org.x + x * tileSize, org.y, theme.gridWidth * scale, playfieldHeight, theme.gridColor);
         }
     }
 }

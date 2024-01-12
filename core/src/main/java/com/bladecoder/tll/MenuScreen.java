@@ -17,9 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.bladecoder.tll.blocks.BlocksLogic;
+import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.DPIUtils;
 
 public class MenuScreen implements Screen {
+
+    private static final String[] THEMES = {"DEFAULT", "SUNSET"};
+
+    private static final String[] GAME_MODES = {"MARATHON", "SPRINT", "ULTRA"};
 
     private Stage stage;
     private final Table menuButtonTable = new Table();
@@ -29,6 +34,8 @@ public class MenuScreen implements Screen {
     private final TLLGame game;
 
     private int startLevel = 1;
+    private int gameMode = 0;
+    private int theme = 0;
 
     public MenuScreen(TLLGame game) {
         this.game = game;
@@ -36,6 +43,10 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        startLevel = Config.getInstance().getPref("startLevel", startLevel);
+        gameMode = Config.getInstance().getPref("gameMode", gameMode);
+        theme = Config.getInstance().getPref("theme", theme);
+
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -64,11 +75,32 @@ public class MenuScreen implements Screen {
         newGame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setBlocksScreen(startLevel);
+                game.setBlocksScreen(startLevel, gameMode, theme);
             }
         });
 
         menuButtonTable.add(newGame);
+        menuButtonTable.row();
+
+        TextButton gameModeButton = new TextButton("Mode  " + GAME_MODES[gameMode], skin, "menu");
+        gameModeButton.getLabel().setAlignment(Align.center);
+        gameModeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(event.getButton() == Input.Buttons.RIGHT) {
+                    if(gameMode > 0)
+                        gameMode-=1;
+                } else {
+                    gameMode = (gameMode + 1) % GAME_MODES.length;
+                }
+
+                gameModeButton.setText("Mode  " + GAME_MODES[gameMode]);
+                Config.getInstance().setPref("gameMode", gameMode);
+                Config.getInstance().savePrefs();
+            }
+        });
+
+        menuButtonTable.add(gameModeButton);
         menuButtonTable.row();
 
         TextButton level = new TextButton("Level " + startLevel, skin, "menu");
@@ -87,10 +119,33 @@ public class MenuScreen implements Screen {
                 }
 
                 level.setText("Level " + startLevel);
+                Config.getInstance().setPref("startLevel", startLevel);
+                Config.getInstance().savePrefs();
             }
         });
 
         menuButtonTable.add(level);
+        menuButtonTable.row();
+
+        TextButton themeButton = new TextButton("Theme " + THEMES[theme], skin, "menu");
+        themeButton.getLabel().setAlignment(Align.center);
+        themeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(event.getButton() == Input.Buttons.RIGHT) {
+                    if(theme > 0)
+                        theme-=1;
+                } else {
+                    theme = (theme + 1) % THEMES.length;
+                }
+
+                themeButton.setText("Theme " + THEMES[theme]);
+                Config.getInstance().setPref("theme", theme);
+                Config.getInstance().savePrefs();
+            }
+        });
+
+        menuButtonTable.add(themeButton);
         menuButtonTable.row();
 
         TextButton quit = new TextButton("Exit", skin, "menu");
@@ -109,7 +164,7 @@ public class MenuScreen implements Screen {
         stage.addActor(menuButtonTable);
         stage.setKeyboardFocus(menuButtonTable);
 
-        ButtonGroup<Button> menuGroup = new ButtonGroup<>(newGame, level, quit);
+        ButtonGroup<Button> menuGroup = new ButtonGroup<>(newGame, gameModeButton, level, themeButton, quit);
         menuGroup.setMinCheckCount(1);
 
         inputListener = new MenuInputListener(game, menuGroup);
