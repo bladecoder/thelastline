@@ -4,6 +4,14 @@ public class GameState {
     private static final int WIDTH = 10;
     private static final int HEIGHT = 20;
 
+    public enum GameMode {
+        MARATHON,
+        SPRINT,
+        ULTRA
+    }
+
+    GameMode gameMode = GameMode.MARATHON;
+
     enum State {
         FALLING,
         ARE,
@@ -21,6 +29,8 @@ public class GameState {
     int lines = 0;
     int level = 1;
     int highScore = 0;
+
+    float gameTime = 0;
 
     public GameState() {
         this(WIDTH, HEIGHT);

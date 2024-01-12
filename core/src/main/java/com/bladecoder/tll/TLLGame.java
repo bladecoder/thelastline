@@ -8,6 +8,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bladecoder.tll.blocks.BlocksLogic;
 import com.bladecoder.tll.blocks.BlocksScreen;
+import com.bladecoder.tll.blocks.GameState;
 import com.bladecoder.tll.blocks.Theme;
 import com.bladecoder.tll.ui.BladeSkin;
 import com.bladecoder.tll.util.EngineLogger;
@@ -44,7 +45,7 @@ public class TLLGame extends Game {
 
     public void setBlocksScreen(int startLevel, int gameMode, int theme) {
         blocksScreen.setStartLevel(startLevel);
-        blocksScreen.setGameMode(BlocksLogic.GameMode.values()[gameMode]);
+        blocksScreen.setGameMode(GameState.GameMode.values()[gameMode]);
         blocksScreen.setTheme(Theme.THEMES[theme]);
         setScreen(blocksScreen);
     }

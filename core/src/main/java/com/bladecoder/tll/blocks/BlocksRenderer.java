@@ -13,8 +13,11 @@ import com.bladecoder.tll.util.RectangleRenderer;
 
 public class BlocksRenderer {
 
-    private final BitmapFont font;
-    private final GlyphLayout textLayout = new GlyphLayout();
+    private final BitmapFont smallFont;
+    private final BitmapFont bigFont;
+
+    private final GlyphLayout textLayoutSmall = new GlyphLayout();
+    private final GlyphLayout textLayoutBig = new GlyphLayout();
     private TextureAtlas.AtlasRegion tile;
     private TextureAtlas.AtlasRegion background;
     private final Vector2 org = new Vector2();
@@ -37,7 +40,8 @@ public class BlocksRenderer {
 
 
     public BlocksRenderer(TextureAtlas atlas, BladeSkin skin, GameState gameState, Theme theme) {
-        this.font = skin.getFont("big-font");
+        this.bigFont = skin.getFont("big-font");
+        this.smallFont = skin.getFont("small-font");
         this.gameState = gameState;
         this.theme = theme;
 
@@ -117,35 +121,46 @@ public class BlocksRenderer {
 
         // draw num. lines
         posy -= size - borderWidth;
-        RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
-        String str = "Lines\n" + gameState.lines;
-        textLayout.setText(font, str, theme.scoresTextColor, 0f, Align.center, false);
-        font.draw(batch, textLayout, posx + size / 2, posy + (size + textLayout.height) / 2);
+        renderSquareText(batch, posx, posy, size,"LINES", "" + gameState.lines, theme.scoresTextColor);
 
         // draw level
         posy -= size - borderWidth;
-        RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
-        str = "Level\n" + gameState.level;
-        textLayout.setText(font, str, theme.scoresTextColor, 0.0f, Align.center, false);
-        font.draw(batch, textLayout, posx + size / 2, posy + (size + textLayout.height) / 2);
+        renderSquareText(batch, posx, posy, size,"LEVEL", "" + gameState.level, theme.scoresTextColor);
 
         // draw score
         posx = org.x + playfieldWidth + borderWidth;
         posy = org.y + gameState.playfield.getHeight() * tileSize - size + borderWidth;
-        RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
-        str = "Score\n" + gameState.points;
-        textLayout.setText(font, str, theme.scoresTextColor, 0.0f, Align.center, false);
-        font.draw(batch, textLayout, posx + size / 2, posy + (size + textLayout.height) / 2);
+
+        String titleStr = "SCORE";
+        String valueStr = "" + gameState.points;
+
+        // if score is too big, show it with small font
+        if(gameState.points > 9999) {
+            titleStr = "SCORE\n" + gameState.points;
+            valueStr = null;
+        }
+
+        renderSquareText(batch, posx, posy, size,titleStr, valueStr, theme.scoresTextColor);
 
         // draw high score
         posy -= size - borderWidth;
+
+        titleStr = "HIGH SCORE";
+        valueStr = "" + gameState.highScore;
+
+        // if score is too big, show it with small font
+        if(gameState.highScore > 9999) {
+            titleStr = "HIGH SCORE\n" + gameState.highScore;
+            valueStr = null;
+        }
+
         Color highScoreColor = theme.scoresTextColor;
         if (gameState.highScore == gameState.points) highScoreColor = Color.RED;
+        renderSquareText(batch, posx, posy, size,titleStr, valueStr, highScoreColor);
 
-        RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
-        str = "High\n" + gameState.highScore;
-        textLayout.setText(font, str, highScoreColor, 0.0f, Align.center, false);
-        font.draw(batch, textLayout, posx + size / 2, posy + (size + textLayout.height) / 2);
+        // draw game mode and time
+        posy -= size - borderWidth;
+        renderSquareText(batch, posx, posy, size,gameState.gameMode.toString() + "\n" + getTimeString(), null, theme.scoresTextColor);
 
         // draw game over or win text
         if (gameState.state == GameState.State.GAME_OVER || gameState.state == GameState.State.WIN) {
@@ -153,15 +168,15 @@ public class BlocksRenderer {
 
             if (gameState.state == GameState.State.WIN) s = "YOU WIN!";
 
-            textLayout.setText(font, s, theme.scoresTextColor, 0.0f, Align.center, false);
+            textLayoutBig.setText(bigFont, s, theme.scoresTextColor, 0.0f, Align.center, false);
             RectangleRenderer.draw(
                     batch,
-                    org.x + (playfieldWidth  - textLayout.width) / 2 - DPIUtils.getMarginSize() * 2,
-                    org.y + (playfieldHeight - textLayout.height) / 2 - DPIUtils.getMarginSize() * 2,
-                    textLayout.width + DPIUtils.getMarginSize() * 4,
-                    textLayout.height + DPIUtils.getMarginSize() * 4,
+                    org.x + (playfieldWidth  - textLayoutBig.width) / 2 - DPIUtils.getMarginSize() * 2,
+                    org.y + (playfieldHeight - textLayoutBig.height) / 2 - DPIUtils.getMarginSize() * 2,
+                    textLayoutBig.width + DPIUtils.getMarginSize() * 4,
+                    textLayoutBig.height + DPIUtils.getMarginSize() * 4,
                     theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
-            font.draw(batch, textLayout,  org.x  + (float)playfieldWidth / 2, org.y + (float) playfieldHeight / 2 + textLayout.height / 2);
+            bigFont.draw(batch, textLayoutBig,  org.x  + (float)playfieldWidth / 2, org.y + (float) playfieldHeight / 2 + textLayoutBig.height / 2);
         }
     }
 
@@ -201,6 +216,21 @@ public class BlocksRenderer {
         }
     }
 
+    private void renderSquareText(SpriteBatch batch, float posx, float posy, float size, String title, String value, Color textColor) {
+        RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
+
+        if(value == null) {
+            textLayoutSmall.setText(smallFont, title, textColor, 0f, Align.center, false);
+            smallFont.draw(batch, textLayoutSmall, posx + size / 2, posy + (size + textLayoutSmall.height) / 2);
+            return;
+        }
+
+        textLayoutSmall.setText(smallFont, title, textColor, 0f, Align.center, false);
+        textLayoutBig.setText(bigFont, value, textColor, 0f, Align.center, false);
+        smallFont.draw(batch, textLayoutSmall, posx + size / 2, posy + (size + textLayoutSmall.height  + textLayoutBig.height  + DPIUtils.getMarginSize()) / 2);
+        bigFont.draw(batch, textLayoutBig, posx + size / 2, posy + (size + textLayoutBig.height - textLayoutSmall.height - DPIUtils.getMarginSize()) / 2);
+    }
+
     private void renderTile(SpriteBatch batch, float x, float y) {
         if(tile != null)
             batch.draw(tile, x, y, tileSize, tileSize);
@@ -218,5 +248,13 @@ public class BlocksRenderer {
         for (int x = 1; x < gameState.playfield.getWidth(); x++) {
             RectangleRenderer.draw(batch, org.x + x * tileSize, org.y, theme.gridWidth * scale, playfieldHeight, theme.gridColor);
         }
+    }
+
+    private String getTimeString() {
+        int hours = (int) (gameState.gameTime / 3600);
+        int minutes = (int) ((gameState.gameTime % 3600) / 60);
+        int seconds = (int) (gameState.gameTime % 60);
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 }

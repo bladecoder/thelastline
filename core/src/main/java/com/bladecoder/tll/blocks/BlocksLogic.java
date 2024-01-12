@@ -17,12 +17,6 @@ public class BlocksLogic {
 
     public static final int MAX_LEVEL = 30;
 
-    public enum GameMode {
-        MARATHON
-    }
-
-    private GameMode gameMode = GameMode.MARATHON;
-
     private float moveDownTime = 0;
 
     private float stateTimer = 0; // time used for ARE and line clear
@@ -37,10 +31,11 @@ public class BlocksLogic {
 
     public BlocksLogic(GameState gameState) {
         this.gameState = gameState;
-        this.gameState.highScore = Config.getInstance().getPref("highscore", 0);
     }
 
     public void update(float delta) {
+        gameState.gameTime += delta;
+
         switch (gameState.state) {
             case ARE:
                 updateARE(delta);
@@ -93,11 +88,21 @@ public class BlocksLogic {
             else if (removedRows == 3) gameState.points += 500 * gameState.level;
             else gameState.points += 800 * gameState.level;
 
-            // level up every 10 lines
-            if (gameState.lines % 10 == 0) {
-                levelUp();
+            if(gameState.gameMode == GameState.GameMode.MARATHON) {
+                // level up every 10 lines
+                if (gameState.lines % 10 == 0) {
+                    levelUp();
 
-                if (gameState.level > MAX_LEVEL) {
+                    if (gameState.level > MAX_LEVEL) {
+                        gameState.state = GameState.State.WIN;
+                    }
+                }
+            } else if(gameState.gameMode == GameState.GameMode.SPRINT) {
+                if(gameState.lines >= 40) {
+                    gameState.state = GameState.State.WIN;
+                }
+            } else if(gameState.gameMode == GameState.GameMode.ULTRA) {
+                if (gameState.lines >= 150) {
                     gameState.state = GameState.State.WIN;
                 }
             }
@@ -111,9 +116,12 @@ public class BlocksLogic {
         }
 
         if (gameState.highScore < gameState.points) {
-            gameState.highScore = gameState.points;
-            Config.getInstance().setPref("highscore", gameState.highScore);
-            Config.getInstance().savePrefs();
+            updateHighScore();
+        }
+
+        if(gameState.gameMode == GameState.GameMode.ULTRA && gameState.gameTime >= 3 * 60) {
+            gameState.state = GameState.State.WIN;
+            return;
         }
 
         moveDownTime += delta;
@@ -202,6 +210,7 @@ public class BlocksLogic {
         // wait 1 second before starting a new game to avoid accidental key press
         if ((gameState.state == GameState.State.GAME_OVER || gameState.state == GameState.State.WIN) && stateTimer < 1.0f) return;
 
+        gameState.gameTime = 0;
         gameState.points = 0;
         gameState.lines = 0;
         setLevel(startLevel);
@@ -249,7 +258,36 @@ public class BlocksLogic {
         return gameState.state;
     }
 
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
+    public void setGameMode(GameState.GameMode gameMode) {
+        gameState.gameMode = gameMode;
+
+        switch (gameState.gameMode) {
+            case MARATHON:
+                gameState.highScore = Config.getInstance().getPref("highscore", 0);
+                break;
+            case SPRINT:
+                gameState.highScore = Config.getInstance().getPref("highscore_sprint", 0);
+                break;
+            case ULTRA:
+                gameState.highScore = Config.getInstance().getPref("highscore_ultra", 0);
+                break;
+        }
+    }
+
+    private void updateHighScore() {
+        gameState.highScore = gameState.points;
+
+        switch (gameState.gameMode) {
+            case MARATHON:
+                Config.getInstance().setPref("highscore", gameState.highScore);
+                break;
+            case SPRINT:
+                Config.getInstance().setPref("highscore_sprint", gameState.highScore);
+                break;
+            case ULTRA:
+                Config.getInstance().setPref("highscore_ultra", gameState.highScore);
+                break;
+        }
+        Config.getInstance().savePrefs();
     }
 }
