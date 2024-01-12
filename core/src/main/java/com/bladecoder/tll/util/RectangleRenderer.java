@@ -45,6 +45,28 @@ public final class RectangleRenderer {
 		batch.setPackedColor(tmp);
 	}
 
+	public static void draw(Batch batch, float posX, float posY, float width, float height, Color color, float borderWidth, Color borderColor) {
+
+		if (texture == null)
+			texture = makePixel();
+
+		if(borderColor != null && borderWidth > 0) {
+			float tmp = batch.getPackedColor();
+			batch.setColor(borderColor);
+
+			batch.draw(texture, posX, posY, 0, 0, width, borderWidth, 1, 1, 0, 0, 0, 1, 1, false, false);
+			batch.draw(texture, posX, posY + height - borderWidth, 0, 0, width, borderWidth, 1, 1, 0, 0, 0, 1, 1, false, false);
+			batch.draw(texture, posX, posY + borderWidth, 0, 0, borderWidth, height - borderWidth * 2, 1, 1, 0, 0, 0, 1, 1, false, false);
+			batch.draw(texture, posX + width - borderWidth, posY + borderWidth, 0, 0, borderWidth, height - borderWidth * 2, 1, 1, 0, 0, 0, 1, 1, false, false);
+
+			batch.setPackedColor(tmp);
+		}
+
+		if(color != null) {
+			draw(batch, posX + borderWidth, posY + borderWidth, width - borderWidth * 2, height - borderWidth * 2, color);
+		}
+	}
+
 	public static void dispose() {
 		if (texture != null)
 			texture.dispose();

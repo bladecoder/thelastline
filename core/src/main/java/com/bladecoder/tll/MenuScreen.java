@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.bladecoder.tll.blocks.BlocksGame;
+import com.bladecoder.tll.blocks.BlocksLogic;
 import com.bladecoder.tll.util.DPIUtils;
 
 public class MenuScreen implements Screen {
@@ -79,9 +79,9 @@ public class MenuScreen implements Screen {
                 if(event.getButton() == Input.Buttons.RIGHT) {
                     if(startLevel > 1)
                         startLevel-=1;
-                    else startLevel = BlocksGame.MAX_LEVEL;
+                    else startLevel = BlocksLogic.MAX_LEVEL;
                 } else {
-                    if (startLevel < BlocksGame.MAX_LEVEL)
+                    if (startLevel < BlocksLogic.MAX_LEVEL)
                         startLevel += 1;
                     else startLevel = 1;
                 }
@@ -143,14 +143,11 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose();
+        stage.dispose();
     }
 
     @Override
     public void dispose() {
-        if (stage != null) {
-            stage.dispose();
-            stage = null;
-        }
+
     }
 }

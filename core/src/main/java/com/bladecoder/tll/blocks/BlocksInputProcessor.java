@@ -17,7 +17,7 @@ public class BlocksInputProcessor implements InputProcessor {
     private static final float DAS_INITIAL_DELAY = 0.26f;
     private static final float DAS_REPEAT_DELAY = 0.05f;
 
-    private final BlocksGame blocksGame;
+    private final BlocksLogic blocksGame;
 
     private float moveTime;
 
@@ -25,7 +25,7 @@ public class BlocksInputProcessor implements InputProcessor {
 
     private final TLLGame game;
 
-    public BlocksInputProcessor(TLLGame game, BlocksGame blocksGame) {
+    public BlocksInputProcessor(TLLGame game, BlocksLogic blocksGame) {
         this.blocksGame = blocksGame;
         this.game = game;
     }
@@ -70,7 +70,7 @@ public class BlocksInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int i) {
-        if(blocksGame.getState() == BlocksGame.State.GAME_OVER || blocksGame.getState() == BlocksGame.State.WIN) {
+        if(blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
             blocksGame.newGame();
             return false;
         }
@@ -168,7 +168,7 @@ public class BlocksInputProcessor implements InputProcessor {
             return;
         }
 
-        if(blocksGame.getState() == BlocksGame.State.GAME_OVER || blocksGame.getState() == BlocksGame.State.WIN) {
+        if(blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
             blocksGame.newGame();
             return;
         }

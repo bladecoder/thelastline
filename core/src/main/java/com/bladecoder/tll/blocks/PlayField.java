@@ -2,16 +2,18 @@ package com.bladecoder.tll.blocks;
 
 class PlayField {
 
+    private static final int EXTRA_ROWS = 2;
+
     private final int[][] field;
 
     private final int width;
     private final int height;
 
     PlayField(int width, int height) {
-        this.field = new int[width][height];
+        this.field = new int[width][height + EXTRA_ROWS];
 
         this.width = width;
-        this.height = height;
+        this.height = height + EXTRA_ROWS;
     }
 
     void clear() {
@@ -55,7 +57,7 @@ class PlayField {
     }
 
     int getHeight() {
-        return height;
+        return height - EXTRA_ROWS;
     }
 
     int getWidth() {
