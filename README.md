@@ -1,5 +1,6 @@
 # The Last Line
-Interactive fiction horror game inspired by Tetris mechanics
+
+Tetris' implementation in Java using LibGDX. Gameplay rules mostly based on NES Tetris.
 
 ## Technical details
 
@@ -7,14 +8,21 @@ Interactive fiction horror game inspired by Tetris mechanics
 - Lock down time not implemented.
 - ARE/entry delay allow move and rotate pieces as in NES.
 
+Useful links:
+
+- [Tetris Guideline](https://tetris.wiki/Tetris_Guideline)
+- [Tetris NES](https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo))
+
 ## GAME TYPES
 
-### Marathon
-
-- 30 levels
+- Marathon
+  - 30 levels
 
 ## TODO
 
+- [ ] Clean ui.atlas
+- [ ] lines for level up depends on level (see NES)
+- [ ] Level up animation
 - [ ] Lock down time (0.5 seconds) - Move time in the ground
 - [x] Implement ARE/entry delay (0.2 seconds)
 - [ ] Split renderer into separate class
