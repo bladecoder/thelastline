@@ -20,6 +20,7 @@ public class BlocksScreen implements Screen {
     private TextureAtlas.AtlasRegion tile;
 
     private int startLevel = 1;
+    private GameState.GameMode gameMode = GameState.GameMode.MARATHON;
 
     private Theme theme = Theme.SUNSET;
 
@@ -42,6 +43,7 @@ public class BlocksScreen implements Screen {
         blocksRenderer = new BlocksRenderer(atlas, game.getSkin(), gameState, theme);
         Gdx.input.setInputProcessor(inputProcessor);
 
+        blocksLogic.setGameMode(gameMode);
         blocksLogic.setStartLevel(startLevel);
         blocksLogic.newGame();
     }
@@ -97,7 +99,7 @@ public class BlocksScreen implements Screen {
         this.theme = theme;
     }
 
-    public void setGameMode(BlocksLogic.GameMode gameMode) {
-        blocksLogic.setGameMode(gameMode);
+    public void setGameMode(GameState.GameMode gameMode) {
+        this.gameMode = gameMode;
     }
 }

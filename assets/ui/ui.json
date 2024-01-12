@@ -3,11 +3,8 @@
 BitmapFont: {
 	default: {file: fonts/Roboto-Regular.ttf, size: 27},
 	debug: {file: fonts/Roboto-Regular.ttf, size: 14},
-	big-font: {file: fonts/Roboto-Black.ttf, size: 30},
-	message-font: {file: fonts/Roboto-Black.ttf, size: 18},
-	choices-font: {file: fonts/Remington-Noiseless.ttf, size: 22},
-	credits-title: {file: fonts/Ubuntu-M.ttf, size: 20},
-	credits: {file: fonts/Ubuntu-M.ttf, size: 30},
+	big-font: {file: fonts/Roboto-Black.ttf, size: 35},
+	small-font: {file: fonts/Roboto-Black.ttf, size: 18},
 	menu-font: {file: fonts/Remington-Noiseless.ttf, size: 25}
 },
 
@@ -40,35 +37,10 @@ TintedDrawable: {
 
 	border-rect-over: { name: border_rect, color: white-trans},
 	border-rect-down: { name: border_rect, color: black},
-
-	help-down: {name:help, color: black},
-	help-over: {name:help, color: white-trans},
-	credits-down: {name:credits, color: black},
-	credits-over: {name:credits, color: white-trans},
-	debug-down: {name:debug, color: black},
-	debug-over: {name:debug, color: white-trans},
-
-	back-down: {name:back, color: black},
-	back-over: {name:back, color: white-trans},
-
-	delete-over: {name:delete, color: white-trans},
-
-	dialog-up-down: {name:dialog_up, color: black},
-	dialog-up-over: {name:dialog_up, color: white-trans},
-	dialog-down-down: {name:dialog_down, color: black},
-	dialog-down-over: {name:dialog_down, color: white-trans}
 },
 
 ButtonStyle: {
 	menu: {up:menu-up, over: menu, down: menu},
-
-	credits: {up:credits, down: credits-down, over: credits-over},
-	debug: {up:debug, down: debug-down, over: debug-over},
-
-	back: {up:back, down: back-down, over: back-over},
-
-	dialog-up: {up:dialog_up, down: dialog-up-down, over: dialog-up-over},
-	dialog-down: {up:dialog_down, down: dialog-down-down, over: dialog-down-over},
 },
 
 
@@ -89,23 +61,6 @@ TextButtonStyle: {
 		downFontColor: white,
 		disabledFontColor: dark-grey
 	},
-
-	toggle: {
-		down: border-rect-down,
-		checked: border_rect,
-		font: debug,
-		fontColor: white,
-		overFontColor: yellow,
-		downFontColor: black-trans,
-		disabledFontColor: dark-grey
-	}
-
-	ui-dialog: {
-		font: message-font,
-		fontColor: white,
-		overFontColor: yellow,
-		downFontColor: grey,
-	}
 },
 
 
@@ -113,7 +68,6 @@ LabelStyle: {
 	default: { font: default, fontColor: white},
 	debug: { font: debug, fontColor: white},
 	title: { font: big-font, fontColor: green},
-	ui-dialog: { font: message-font, fontColor: white},
 },
 
 TextFieldStyle: {
