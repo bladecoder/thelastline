@@ -2,10 +2,9 @@
 
 BitmapFont: {
 	default: {file: fonts/Roboto-Regular.ttf, size: 27},
-	debug: {file: fonts/Roboto-Regular.ttf, size: 14},
 	big-font: {file: fonts/Roboto-Black.ttf, size: 40},
 	small-font: {file: fonts/Roboto-Black.ttf, size: 18},
-	menu-font: {file: fonts/Remington-Noiseless.ttf, size: 25}
+	menu-font: {file: fonts/Roboto-Black.ttf, size: 25}
 },
 
 
@@ -44,7 +43,7 @@ ButtonStyle: {
 
 TextButtonStyle: {
 	default: {
-		font: debug,
+		font: default,
 		up: grey,
 		fontColor: white,
 		overFontColor: green,
@@ -64,7 +63,6 @@ TextButtonStyle: {
 
 LabelStyle: {
 	default: { font: default, fontColor: white},
-	debug: { font: debug, fontColor: white},
 	title: { font: big-font, fontColor: green},
 },
 
@@ -74,11 +72,11 @@ TextFieldStyle: {
 		background: dark-grey,
 		focusedBackground: dark-grey,
 		disabledBackground: grey,
-		font: debug,
+		font: default,
 		fontColor: white,
 		focusedFontColor: text-dark,
 		disabledFontColor: text-dark,
-		cursor: white, messageFont: debug,
+		cursor: white, messageFont: default,
 		messageFontColor: text-dark
 	}
 },
@@ -101,14 +99,14 @@ ListStyle: {
 		fontColorUnselected: text-dark,
 		selection: dark-grey,
 		fontColorSelected: text-dark,
-		font: debug
+		font: default
 	},
 
 	opaque: {
 		fontColorUnselected: text-dark,
 		selection: grey,
 		fontColorSelected: text-dark,
-		font: debug
+		font: default
 	}
 },
 
@@ -120,7 +118,7 @@ SelectBoxStyle: {
 		backgroundOpen: dark-grey,
 		listStyle: default,
 		scrollStyle: opaque,
-		font: debug,
+		font: default,
 		fontColor: white
 	},
 },

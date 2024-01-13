@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.bladecoder.tll.blocks.BlocksLogic;
+import com.bladecoder.tll.blocks.Theme;
 import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.DPIUtils;
 
@@ -33,9 +34,16 @@ public class MenuScreen implements Screen {
 
     private final TLLGame game;
 
+    private Theme theme;
+
+    private ButtonGroup<Button> menuGroup;
+
+    private Label title;
+
     public MenuScreen(TLLGame game) {
         this.game = game;
     }
+
 
     @Override
     public void show() {
@@ -55,12 +63,12 @@ public class MenuScreen implements Screen {
         float buttonWidth = f.getCapHeight() * 15f;
         menuButtonTable.defaults().pad(DPIUtils.getSpacing()).width(buttonWidth).align(Align.center);
 
-        Label title = new Label("The Last Line", skin,
+        title = new Label("THE LAST LINE", skin,
                 "title");
 
         title.setAlignment(Align.center);
 
-        menuButtonTable.add(title).padBottom(DPIUtils.getMarginSize() * 2);
+        menuButtonTable.add(title).padBottom(DPIUtils.getMarginSize());
         menuButtonTable.row();
 
         TextButton resumeGame = new TextButton("Resume", skin, "menu");
@@ -145,18 +153,20 @@ public class MenuScreen implements Screen {
         themeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                int theme = Config.getInstance().getPref("theme", 0);
+                int themeIdx = Config.getInstance().getPref("theme", 0);
 
                 if(event.getButton() == Input.Buttons.RIGHT) {
-                    if(theme > 0)
-                        theme-=1;
+                    if(themeIdx > 0)
+                        themeIdx-=1;
                 } else {
-                    theme = (theme + 1) % THEMES.length;
+                    themeIdx = (themeIdx + 1) % THEMES.length;
                 }
 
-                themeButton.setText("Theme " + THEMES[theme]);
-                Config.getInstance().setPref("theme", theme);
+                themeButton.setText("Theme " + THEMES[themeIdx]);
+                Config.getInstance().setPref("theme", themeIdx);
                 Config.getInstance().savePrefs();
+
+                updateTheme();
             }
         });
 
@@ -179,17 +189,31 @@ public class MenuScreen implements Screen {
         stage.addActor(menuButtonTable);
         stage.setKeyboardFocus(menuButtonTable);
 
-        ButtonGroup<Button> menuGroup = game.isPaused() ? new ButtonGroup<>( resumeGame, newGame, gameModeButton, level, themeButton, quit) :
+        menuGroup = game.isPaused() ? new ButtonGroup<>( resumeGame, newGame, gameModeButton, level, themeButton, quit) :
                 new ButtonGroup<>( newGame, gameModeButton, level, themeButton, quit);
         menuGroup.setMinCheckCount(1);
 
         inputListener = new MenuInputListener(game, menuGroup);
         menuButtonTable.addListener(inputListener);
+
+        updateTheme();
+    }
+
+    private void updateTheme() {
+        theme = Theme.THEMES[Config.getInstance().getPref("theme", 0)];
+
+        TextButton.TextButtonStyle style = (TextButton.TextButtonStyle) menuGroup.getButtons().get(0).getStyle();
+
+        style.checkedFontColor = theme.scoresTextColor;
+        style.checkedFocusedFontColor = theme.scoresTextColor;
+        style.fontColor = theme.scoresTextColor.cpy().mul(0.6f);
+
+        title.getStyle().fontColor = theme.scoresTextColor;
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(theme.bgColor.r, theme.bgColor.g, theme.bgColor.b, theme.bgColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
