@@ -179,14 +179,11 @@ public class BlocksInputProcessor implements InputProcessor {
             return;
         }
 
-        if (buttonCode == controller.getMapping().buttonA) {
-            blocksGame.rotateRight();
-        } else if (buttonCode == controller.getMapping().buttonB) {
-            blocksGame.rotateLeft();
-        } else if (buttonCode == controller.getMapping().buttonDpadUp) {
+        if (buttonCode == controller.getMapping().buttonDpadUp) {
             blocksGame.drop();
         } else if (buttonCode == controller.getMapping().buttonR1
-            || buttonCode == controller.getMapping().buttonR2) {
+                || buttonCode == controller.getMapping().buttonR2
+                || buttonCode == controller.getMapping().buttonL1) {
             blocksGame.drop();
         } else if (buttonCode == controller.getMapping().buttonDpadDown) {
             blocksGame.setSoftDrop(false);
@@ -196,7 +193,11 @@ public class BlocksInputProcessor implements InputProcessor {
     private void buttonDown(Controller controller, int buttonCode) {
         EngineLogger.debug(buttonCode + " gamepad button down.");
 
-        if (buttonCode == controller.getMapping().buttonDpadRight) {
+        if (buttonCode == controller.getMapping().buttonA) {
+            blocksGame.rotateRight();
+        } else if (buttonCode == controller.getMapping().buttonB) {
+            blocksGame.rotateLeft();
+        }else if (buttonCode == controller.getMapping().buttonDpadRight) {
             moveTime = DAS_INITIAL_DELAY;
             blocksGame.moveRight();
         } else if (buttonCode == controller.getMapping().buttonDpadLeft) {
