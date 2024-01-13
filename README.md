@@ -21,9 +21,7 @@ Useful links:
 
 ## TODO
 - [ ] Icons
-- [ ] Clean ui.atlas
-- [ ] Mono theme
-- [ ] One theme using texture atlas
+- [ ] Tint in themes. Atlas in default theme using tint.
 - [ ] Tile color by type
 - [ ] Level up animation
 - [ ] Sound effects
