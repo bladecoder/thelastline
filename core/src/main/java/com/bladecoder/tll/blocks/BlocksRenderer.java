@@ -131,7 +131,7 @@ public class BlocksRenderer {
         renderSquareText(batch, posx, posy,"LEVEL", "" + gameState.level, theme.scoresTextColor);
 
         // draw score
-        posx = org.x + playfieldWidth + borderWidth;
+        posx = org.x + playfieldWidth + (theme.scoresBorderColor != null ? 0 : borderWidth);
         posy = org.y + gameState.playfield.getHeight() * tileSize - scoreSquareSize + borderWidth;
 
         String titleStr = "SCORE";
@@ -148,7 +148,7 @@ public class BlocksRenderer {
         // draw high score
         posy -= scoreSquareSize - borderWidth;
 
-        titleStr = "HIGH SCORE";
+        titleStr = "BEST";
         valueStr = "" + gameState.highScore;
 
         // if score is too big, show it with small font
@@ -207,7 +207,7 @@ public class BlocksRenderer {
 
         RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
 
-        posx = posx + (size - tileSize * next.length) / 2f - borderWidth;
+        posx = posx + (size - tileSize * next.length) / 2f; // - borderWidth;
         posy = posy + (size - tileSize * (next.length == 4? 1:2)) / 2f;
 
         for (int y = 0; y < next.length; y++) {

@@ -2,7 +2,7 @@
 
 BitmapFont: {
 	default: {file: fonts/Roboto-Regular.ttf, size: 27},
-	big-font: {file: fonts/Roboto-Black.ttf, size: 40},
+	big-font: {file: fonts/Roboto-Black.ttf, size: 35},
 	small-font: {file: fonts/Roboto-Black.ttf, size: 18},
 	menu-font: {file: fonts/Roboto-Black.ttf, size: 25}
 },

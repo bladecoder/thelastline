@@ -169,6 +169,7 @@ public class BlocksInputProcessor implements InputProcessor {
         EngineLogger.debug(buttonCode + " gamepad button up.");
 
         if (buttonCode == controller.getMapping().buttonStart) {
+            blocksGame.pause();
             game.setMenuScreen();
 
             return;

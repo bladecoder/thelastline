@@ -23,11 +23,11 @@ Useful links:
 - [ ] Icons
 - [ ] Tint in themes. Atlas in default theme using tint.
 - [ ] Tile color by type
+- [ ] Move in menu with controller axis
 - [ ] Level up animation
 - [ ] Sound effects
 - [ ] Music
 - [ ] Vertical mode
-- [ ] Menu screen themes
 - [ ] Version and credits on menu screen
 - [ ] Android version
 - [ ] iOS version
