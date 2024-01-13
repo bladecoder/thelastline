@@ -5,5 +5,4 @@ theme-mono.atlas
 ui.atlas
 ui.png
 fonts/Roboto-Regular.ttf
-fonts/Remington-Noiseless.ttf
 fonts/Roboto-Black.ttf
