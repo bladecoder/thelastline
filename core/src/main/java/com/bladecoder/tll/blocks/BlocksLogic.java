@@ -34,13 +34,11 @@ public class BlocksLogic {
     }
 
     public void update(float delta) {
-        if(gameState.paused) return;
+        if (gameState.paused) return;
 
-        if(gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN) {
-            if(gameState.gameMode == GameState.GameMode.ULTRA)
-                gameState.gameTime -= delta;
-            else
-                gameState.gameTime += delta;
+        if (gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN) {
+            if (gameState.gameMode == GameState.GameMode.ULTRA) gameState.gameTime -= delta;
+            else gameState.gameTime += delta;
         }
 
         switch (gameState.state) {
@@ -60,9 +58,9 @@ public class BlocksLogic {
     }
 
     private void updateARE(float delta) {
-        stateTimer += delta;
+        stateTimer -= delta;
 
-        if (stateTimer > INITIAL_DELAY_TIME) {
+        if (stateTimer < 0) {
             stateTimer = 0;
             gameState.state = GameState.State.FALLING;
         }
@@ -95,7 +93,7 @@ public class BlocksLogic {
             else if (removedRows == 3) gameState.points += 500 * gameState.level;
             else gameState.points += 800 * gameState.level;
 
-            if(gameState.gameMode == GameState.GameMode.MARATHON) {
+            if (gameState.gameMode == GameState.GameMode.MARATHON) {
                 // level up every 10 lines
                 if (gameState.lines % 10 == 0) {
                     levelUp();
@@ -104,11 +102,11 @@ public class BlocksLogic {
                         gameState.state = GameState.State.WIN;
                     }
                 }
-            } else if(gameState.gameMode == GameState.GameMode.SPRINT) {
-                if(gameState.lines >= 40) {
+            } else if (gameState.gameMode == GameState.GameMode.SPRINT) {
+                if (gameState.lines >= 40) {
                     gameState.state = GameState.State.WIN;
                 }
-            } else if(gameState.gameMode == GameState.GameMode.ULTRA) {
+            } else if (gameState.gameMode == GameState.GameMode.ULTRA) {
                 if (gameState.lines >= 150) {
                     gameState.state = GameState.State.WIN;
                 }
@@ -126,7 +124,7 @@ public class BlocksLogic {
             updateHighScore();
         }
 
-        if(gameState.gameMode == GameState.GameMode.ULTRA && gameState.gameTime <= 0) {
+        if (gameState.gameMode == GameState.GameMode.ULTRA && gameState.gameTime <= 0) {
             gameState.state = GameState.State.WIN;
             return;
         }
@@ -155,37 +153,56 @@ public class BlocksLogic {
         if (gameState.playfield.isSomeRowFull()) {
             gameState.state = GameState.State.LINE_CLEAR;
         } else {
+            stateTimer = INITIAL_DELAY_TIME;
+
+            if (gameState.tetramino.getPos().y > 2) {
+                // Pieces that lock in the bottom two rows are followed by 10 frames of entry delay, and each group of 4
+                // rows above that has an entry delay 2 frames longer than the last
+                stateTimer += INITIAL_DELAY_TIME_EACH_FOUR * (gameState.tetramino.getPos().y - 2) / 4f;
+            }
+
             gameState.tetramino.next();
             gameState.state = GameState.State.ARE;
         }
     }
 
-    public void moveLeft() {
-        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return;
+    // returns true if the move has been done
+    public boolean moveLeft() {
+        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return false;
 
         for (int y = 0; y < gameState.tetramino.getHeight(); y++) {
             for (int x = 0; x < gameState.tetramino.getWidth(); x++) {
                 if (!gameState.tetramino.isFree(x, y)) {
-                    if (!gameState.playfield.isFree((int) gameState.tetramino.getPos().x + x - 1, (int) gameState.tetramino.getPos().y + y)) return;
+                    if (!gameState.playfield.isFree(
+                            (int) gameState.tetramino.getPos().x + x - 1, (int) gameState.tetramino.getPos().y + y))
+                        return false;
                 }
             }
         }
 
         gameState.tetramino.moveLeft();
+
+        return true;
     }
 
-    public void moveRight() {
-        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return;
+    // returns true if the move has been done
+
+    public boolean moveRight() {
+        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return false;
 
         for (int y = 0; y < gameState.tetramino.getHeight(); y++) {
             for (int x = 0; x < gameState.tetramino.getWidth(); x++) {
                 if (!gameState.tetramino.isFree(x, y)) {
-                    if (!gameState.playfield.isFree((int) gameState.tetramino.getPos().x + x + 1, (int) gameState.tetramino.getPos().y + y)) return;
+                    if (!gameState.playfield.isFree(
+                            (int) gameState.tetramino.getPos().x + x + 1, (int) gameState.tetramino.getPos().y + y))
+                        return false;
                 }
             }
         }
 
         gameState.tetramino.moveRight();
+
+        return true;
     }
 
     public void rotateLeft() {
@@ -215,12 +232,11 @@ public class BlocksLogic {
 
     public void newGame() {
         // wait 1 second before starting a new game to avoid accidental key press
-        if ((gameState.state == GameState.State.GAME_OVER || gameState.state == GameState.State.WIN) && stateTimer < 1.0f) return;
+        if ((gameState.state == GameState.State.GAME_OVER || gameState.state == GameState.State.WIN)
+                && stateTimer < 1.0f) return;
 
-        if(gameState.gameMode == GameState.GameMode.ULTRA)
-            gameState.gameTime = 3 * 60; // 3 minutes
-        else
-            gameState.gameTime = 0;
+        if (gameState.gameMode == GameState.GameMode.ULTRA) gameState.gameTime = 3 * 60; // 3 minutes
+        else gameState.gameTime = 0;
 
         gameState.points = 0;
         gameState.lines = 0;
@@ -239,7 +255,9 @@ public class BlocksLogic {
         for (int y = 0; y < gameState.tetramino.getHeight(); y++) {
             for (int x = 0; x < gameState.tetramino.getWidth(); x++) {
                 if (!gameState.tetramino.isFree(x, y)) {
-                    if (!gameState.playfield.isFree((int) gameState.tetramino.getPos().x + x, (int) gameState.tetramino.getPos().y + y)) return true;
+                    if (!gameState.playfield.isFree(
+                            (int) gameState.tetramino.getPos().x + x, (int) gameState.tetramino.getPos().y + y))
+                        return true;
                 }
             }
         }
@@ -303,7 +321,7 @@ public class BlocksLogic {
     }
 
     public void pause() {
-        if(gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN)
+        if (gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN)
             gameState.paused = true;
     }
 
