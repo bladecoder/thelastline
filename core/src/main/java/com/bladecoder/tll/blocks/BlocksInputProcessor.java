@@ -25,6 +25,8 @@ public class BlocksInputProcessor implements InputProcessor {
 
     private final TLLGame game;
 
+    private boolean das;
+
     public BlocksInputProcessor(TLLGame game, BlocksLogic blocksGame) {
         this.blocksGame = blocksGame;
         this.game = game;
@@ -42,11 +44,11 @@ public class BlocksInputProcessor implements InputProcessor {
         switch (i) {
             case Input.Keys.LEFT:
                 moveTime = DAS_INITIAL_DELAY;
-                blocksGame.moveLeft();
+                das = blocksGame.moveLeft();
                 break;
             case Input.Keys.RIGHT:
                 moveTime = DAS_INITIAL_DELAY;
-                blocksGame.moveRight();
+                das = blocksGame.moveRight();
                 break;
             case Input.Keys.UP:
             case Input.Keys.X:
@@ -130,10 +132,15 @@ public class BlocksInputProcessor implements InputProcessor {
 
         updateButtons();
 
-        if(moveTime > 0)
+        // if the block could not move, we don't wait for the DAS to allow the kick of the block
+        // while the button is pressed. If not, the block will be locked while waiting for the DAS.
+        if(das && moveTime > 0)
             return;
 
-        moveTime = DAS_REPEAT_DELAY;
+        if(!das)
+            moveTime = DAS_INITIAL_DELAY;
+        else
+            moveTime = DAS_REPEAT_DELAY;
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             blocksGame.moveLeft();
@@ -200,10 +207,10 @@ public class BlocksInputProcessor implements InputProcessor {
             blocksGame.rotateLeft();
         }else if (buttonCode == controller.getMapping().buttonDpadRight) {
             moveTime = DAS_INITIAL_DELAY;
-            blocksGame.moveRight();
+            das = blocksGame.moveRight();
         } else if (buttonCode == controller.getMapping().buttonDpadLeft) {
             moveTime = DAS_INITIAL_DELAY;
-            blocksGame.moveLeft();
+            das = blocksGame.moveLeft();
         } else if (buttonCode == controller.getMapping().buttonDpadDown) {
             blocksGame.setSoftDrop(true);
         }
@@ -212,9 +219,9 @@ public class BlocksInputProcessor implements InputProcessor {
     private void updateDPad() {
         for (Controller controller : Controllers.getControllers()) {
             if (controller.getButton(controller.getMapping().buttonDpadRight)) {
-                blocksGame.moveRight();
+                das = blocksGame.moveRight();
             } else if (controller.getButton(controller.getMapping().buttonDpadLeft)) {
-                blocksGame.moveLeft();
+                das = blocksGame.moveLeft();
             }
         }
     }
