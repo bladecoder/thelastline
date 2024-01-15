@@ -31,7 +31,9 @@ public class BlocksRenderer {
 
     private int tileSize;
 
-    private float borderWidth;
+    private float playfieldBorderWidth;
+
+    private float scoresBorderWidth;
 
     private final Theme theme;
 
@@ -52,7 +54,7 @@ public class BlocksRenderer {
             this.tile = atlas.findRegion("tile");
         }
 
-        borderWidth = theme.borderWidth;
+        playfieldBorderWidth = theme.playfieldBorderWidth;
     }
 
     public void resize(int width, int height) {
@@ -73,10 +75,15 @@ public class BlocksRenderer {
 
         this.org.set((float) ((width - playfieldWidth) / 2.0), DPIUtils.getMarginSize());
 
-        borderWidth = (int)(theme.borderWidth * scale);
+        playfieldBorderWidth = (int)(theme.playfieldBorderWidth * scale);
 
-        if(borderWidth < 1)
-            borderWidth = 1;
+        if(playfieldBorderWidth < 1)
+            playfieldBorderWidth = 1;
+
+        scoresBorderWidth = (int)(theme.scoresBorderWidth * scale);
+
+        if(scoresBorderWidth < 1)
+            scoresBorderWidth = 1;
 
         scoreSquareSize = 4 * tileSize + DPIUtils.getSpacing() * 2;
     }
@@ -89,7 +96,7 @@ public class BlocksRenderer {
         }
 
         // draw playfield border
-        RectangleRenderer.draw(batch, org.x - borderWidth, org.y - borderWidth, playfieldWidth + borderWidth * 2, playfieldHeight + borderWidth * 2, theme.playfieldColor, borderWidth, theme.playfieldBorderColor);
+        RectangleRenderer.draw(batch, org.x - playfieldBorderWidth, org.y - playfieldBorderWidth, playfieldWidth + playfieldBorderWidth * 2, playfieldHeight + playfieldBorderWidth * 2, theme.playfieldColor, playfieldBorderWidth, theme.playfieldBorderColor);
 
         // render grid
         if (theme.gridColor != null)
@@ -117,22 +124,27 @@ public class BlocksRenderer {
             }
         }
 
-        float posx = org.x - scoreSquareSize;
-        float posy = org.y + gameState.playfield.getHeight() * tileSize - scoreSquareSize + borderWidth;
+        float posx = org.x - scoreSquareSize - playfieldBorderWidth + scoresBorderWidth;
+        float posy = org.y + gameState.playfield.getHeight() * tileSize - scoreSquareSize + playfieldBorderWidth;
 
         renderNextTetramino(batch, posx, posy, scoreSquareSize);
 
         // draw num. lines
-        posy -= scoreSquareSize - borderWidth;
+        posy -= scoreSquareSize - scoresBorderWidth;
+
+        // No margin needed if border is not drawn
+        if(scoresBorderWidth < 1 || theme.scoresBorderColor == null)
+        	posx += DPIUtils.getMarginSize();
+
         renderSquareText(batch, posx, posy,"LINES", "" + gameState.lines, theme.scoresTextColor);
 
         // draw level
-        posy -= scoreSquareSize - borderWidth;
+        posy -= scoreSquareSize - scoresBorderWidth;
         renderSquareText(batch, posx, posy,"LEVEL", "" + gameState.level, theme.scoresTextColor);
 
         // draw score
-        posx = org.x + playfieldWidth + (theme.scoresBorderColor != null ? 0 : borderWidth);
-        posy = org.y + gameState.playfield.getHeight() * tileSize - scoreSquareSize + borderWidth;
+        posx = org.x + playfieldWidth + playfieldBorderWidth - scoresBorderWidth;
+        posy = org.y + gameState.playfield.getHeight() * tileSize - scoreSquareSize + playfieldBorderWidth;
 
         String titleStr = "SCORE";
         String valueStr = "" + gameState.points;
@@ -146,7 +158,7 @@ public class BlocksRenderer {
         renderSquareText(batch, posx, posy,titleStr, valueStr, theme.scoresTextColor);
 
         // draw high score
-        posy -= scoreSquareSize - borderWidth;
+        posy -= scoreSquareSize - scoresBorderWidth;
 
         titleStr = "BEST";
         valueStr = "" + gameState.highScore;
@@ -162,7 +174,7 @@ public class BlocksRenderer {
         renderSquareText(batch, posx, posy,titleStr, valueStr, highScoreColor);
 
         // draw game mode and time
-        posy -= scoreSquareSize - borderWidth;
+        posy -= scoreSquareSize - scoresBorderWidth;
         renderSquareText(batch, posx, posy,gameState.gameMode.toString() + "\n" + getTimeString(), null, theme.scoresTextColor);
 
         // draw game over or win text
@@ -184,7 +196,7 @@ public class BlocksRenderer {
                     org.y + (playfieldHeight - textLayoutBig.height) / 2 - DPIUtils.getMarginSize() * 2,
                     textLayoutBig.width + DPIUtils.getMarginSize() * 4,
                     textLayoutBig.height + DPIUtils.getMarginSize() * 4,
-                    c, borderWidth, theme.scoresBorderColor);
+                    c, scoresBorderWidth, theme.scoresBorderColor);
             bigFont.draw(batch, textLayoutBig,  org.x  + (float)playfieldWidth / 2, org.y + (float) playfieldHeight / 2 + textLayoutBig.height / 2);
         }
     }
@@ -205,7 +217,7 @@ public class BlocksRenderer {
     private void renderNextTetramino(SpriteBatch batch, float posx, float posy, float size) {
         int[][] next = gameState.tetramino.getNext();
 
-        RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
+        RectangleRenderer.draw(batch, posx, posy, size, size, theme.scoresBgColor, scoresBorderWidth, theme.scoresBorderColor);
 
         posx = posx + (size - tileSize * next.length) / 2f; // - borderWidth;
         posy = posy + (size - tileSize * (next.length == 4? 1:2)) / 2f;
@@ -226,7 +238,7 @@ public class BlocksRenderer {
     }
 
     private void renderSquareText(SpriteBatch batch, float posx, float posy, String title, String value, Color textColor) {
-        RectangleRenderer.draw(batch, posx, posy, scoreSquareSize, scoreSquareSize, theme.scoresBgColor, borderWidth, theme.scoresBorderColor);
+        RectangleRenderer.draw(batch, posx, posy, scoreSquareSize, scoreSquareSize, theme.scoresBgColor, scoresBorderWidth, theme.scoresBorderColor);
 
         if(value == null) {
             textLayoutSmall.setText(smallFont, title, textColor, 0f, Align.center, false);
