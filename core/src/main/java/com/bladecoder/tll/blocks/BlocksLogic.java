@@ -168,7 +168,7 @@ public class BlocksLogic {
 
     // returns true if the move has been done
     public boolean moveLeft() {
-        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return false;
+        if ((gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) || isPaused()) return true;
 
         for (int y = 0; y < gameState.tetramino.getHeight(); y++) {
             for (int x = 0; x < gameState.tetramino.getWidth(); x++) {
@@ -188,7 +188,7 @@ public class BlocksLogic {
     // returns true if the move has been done
 
     public boolean moveRight() {
-        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return false;
+        if ((gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) || isPaused()) return true;
 
         for (int y = 0; y < gameState.tetramino.getHeight(); y++) {
             for (int x = 0; x < gameState.tetramino.getWidth(); x++) {
@@ -206,21 +206,21 @@ public class BlocksLogic {
     }
 
     public void rotateLeft() {
-        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return;
+        if ((gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) || isPaused()) return;
 
         gameState.tetramino.rotateLeft();
         if (isGameOver()) gameState.tetramino.rotateRight();
     }
 
     public void rotateRight() {
-        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return;
+        if ((gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) || isPaused()) return;
 
         gameState.tetramino.rotateRight();
         if (isGameOver()) gameState.tetramino.rotateLeft();
     }
 
     public void drop() {
-        if (gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) return;
+        if ((gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) || isPaused()) return;
 
         while (gameState.playfield.canMoveDown(gameState.tetramino)) {
             gameState.tetramino.moveDown();
