@@ -30,7 +30,6 @@ Useful links:
 - [ ] Sound effects
 - [ ] Music
 - [ ] Vertical mode
-- [ ] Version and credits on menu screen
 - [ ] Android version
 - [ ] iOS version
 
