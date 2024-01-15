@@ -24,7 +24,9 @@ public class Theme {
     public Color tileBorderColor = Color.BLACK;
     public float tileBorderWidth = 4;
 
-    public float borderWidth = 2;
+    public float playfieldBorderWidth = 2;
+
+    public float scoresBorderWidth = 2;
 
     public Color clearLineColor = Color.GREEN;
     public String atlas = null;
@@ -43,11 +45,12 @@ public class Theme {
         theme.scoresTextColor = Color.WHITE;
         theme.scoresBgColor = lightBg;
         theme.scoresBorderColor = accent;
+        theme.scoresBorderWidth = 6;
         theme.tileColor = accent;
         theme.tileBorderColor = new Color(0x142532ff);
         theme.tileBorderWidth = 4;
 
-        theme.borderWidth = 6;
+        theme.playfieldBorderWidth = 6;
 
         theme.clearLineColor = accent;
         theme.atlas = null;
@@ -67,11 +70,12 @@ public class Theme {
         theme.scoresTextColor = accent;
         theme.scoresBgColor = null;
         theme.scoresBorderColor = null;
+        theme.scoresBorderWidth = 0;
         theme.tileColor = accent;
         theme.tileBorderColor = new Color(0x142532ff);
         theme.tileBorderWidth = 4;
 
-        theme.borderWidth = 30;
+        theme.playfieldBorderWidth = 30;
 
         theme.clearLineColor = accent;
 
