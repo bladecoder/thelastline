@@ -13,6 +13,7 @@ import com.bladecoder.tll.util.RectangleRenderer;
 
 public class BlocksRenderer {
 
+    public static final int MAX_BIG_SCORE = 9999;
     private BitmapFont smallFont;
     private BitmapFont bigFont;
 
@@ -195,7 +196,7 @@ public class BlocksRenderer {
 
         // No margin needed if border is not drawn
         if(scoresBorderWidth < 1 || theme.scoresBorderColor == null)
-            posx += DPIUtils.getMarginSize();
+            posx += DPIUtils.getSpacing() * 2;
 
         renderScoreText(batch, posx, posy, scoresWidth, scoresHeight, "LINES", "" + gameState.lines, theme.scoresTextColor);
 
@@ -211,7 +212,7 @@ public class BlocksRenderer {
         String valueStr = "" + gameState.points;
 
         // if score is too big, show it with small font
-        if(gameState.points > 99999) {
+        if(gameState.points > MAX_BIG_SCORE) {
             titleStr += "\n" + gameState.points;
             valueStr = null;
         }
@@ -225,7 +226,7 @@ public class BlocksRenderer {
         valueStr = "" + gameState.highScore;
 
         // if score is too big, show it with small font
-        if(gameState.highScore > 99999) {
+        if(gameState.highScore > MAX_BIG_SCORE) {
             titleStr += "\n" + gameState.highScore;
             valueStr = null;
         }
@@ -250,7 +251,7 @@ public class BlocksRenderer {
         String valueStr = "" + gameState.points;
 
         // if score is too big, show it with small font
-        if(gameState.points > 99999) {
+        if(gameState.points > MAX_BIG_SCORE) {
             titleStr += "\n" + gameState.points;
             valueStr = null;
         }
@@ -264,7 +265,7 @@ public class BlocksRenderer {
         valueStr = "" + gameState.highScore;
 
         // if score is too big, show it with small font
-        if(gameState.highScore > 99999) {
+        if(gameState.highScore > MAX_BIG_SCORE) {
             titleStr += "\n" + gameState.highScore;
             valueStr = null;
         }
