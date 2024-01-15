@@ -29,7 +29,6 @@ Useful links:
 - [ ] Level up animation
 - [ ] Sound effects
 - [ ] Music
-- [ ] Vertical mode
 - [ ] Android version
 - [ ] iOS version
 

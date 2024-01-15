@@ -17,6 +17,8 @@ public class BlocksInputProcessor implements InputProcessor {
     private static final float DAS_INITIAL_DELAY = 0.26f;
     private static final float DAS_REPEAT_DELAY = 0.05f;
 
+    private static final float DAS_MOVE_DELAY = 0.05f;
+
     private final BlocksLogic blocksGame;
 
     private float moveTime;
@@ -27,15 +29,24 @@ public class BlocksInputProcessor implements InputProcessor {
 
     private boolean das;
 
+    private int movedPointer;
+
+    private int touchDownX;
+    private int touchDownY;
+
+    private boolean dragging;
+
     public BlocksInputProcessor(TLLGame game, BlocksLogic blocksGame) {
         this.blocksGame = blocksGame;
         this.game = game;
+
+        movedPointer = -1;
     }
 
     @Override
     public boolean keyDown(int i) {
 
-        if(i ==Input.Keys.ESCAPE) {
+        if (i == Input.Keys.ESCAPE) {
             blocksGame.pause();
             game.setMenuScreen();
             return true;
@@ -73,18 +84,16 @@ public class BlocksInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int i) {
-        if(blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
+        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
             blocksGame.newGame();
             return false;
         }
 
-        if(i == Input.Keys.DOWN) {
+        if (i == Input.Keys.DOWN) {
             blocksGame.setSoftDrop(false);
-        } else if(i == Input.Keys.P) {
-            if(blocksGame.isPaused())
-                blocksGame.resume();
-            else
-                blocksGame.pause();
+        } else if (i == Input.Keys.P) {
+            if (blocksGame.isPaused()) blocksGame.resume();
+            else blocksGame.pause();
         }
 
         return false;
@@ -96,13 +105,34 @@ public class BlocksInputProcessor implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
-        return false;
+    public boolean touchDown(int screenX,
+                             int screenY,
+                             int pointer,
+                             int button) {
+
+        touchDownX = screenX;
+        touchDownY = screenY;
+
+        return true;
     }
 
     @Override
-    public boolean touchUp(int i, int i1, int i2, int i3) {
-        return false;
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
+            blocksGame.newGame();
+            return true;
+        }
+
+        if (movedPointer == pointer) {
+            movedPointer = -1;
+            moveTime = 0;
+            dragging = false;
+            return true;
+        }
+
+        blocksGame.rotateRight();
+
+        return true;
     }
 
     @Override
@@ -111,8 +141,25 @@ public class BlocksInputProcessor implements InputProcessor {
     }
 
     @Override
-    public boolean touchDragged(int i, int i1, int i2) {
-        return false;
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        System.out.println("touchDragged: " + touchDownX + ", " + screenX + ", " + (touchDownX - screenX) + ", " + moveTime);
+
+        dragging = true;
+        if(moveTime > 0) return true;
+
+        if(touchDownX - screenX > 5) {
+            moveTime = DAS_MOVE_DELAY;
+            blocksGame.moveLeft();
+            touchDownX = screenX;
+            movedPointer = pointer;
+        } else if(touchDownX - screenX < -5) {
+            moveTime = DAS_MOVE_DELAY;
+            blocksGame.moveRight();
+            touchDownX = screenX;
+            movedPointer = pointer;
+        }
+
+        return true;
     }
 
     @Override
@@ -130,21 +177,22 @@ public class BlocksInputProcessor implements InputProcessor {
 
         moveTime -= delta;
 
+        if(dragging) {
+            return;
+        }
+
         updateButtons();
 
         // if the block could not move, we don't wait for the DAS to allow the kick of the block
         // while the button is pressed. If not, the block will be locked while waiting for the DAS.
-        if(das && moveTime > 0)
-            return;
+        if (das && moveTime > 0) return;
 
-        if(!das)
-            moveTime = DAS_INITIAL_DELAY;
-        else
-            moveTime = DAS_REPEAT_DELAY;
+        if (!das) moveTime = DAS_INITIAL_DELAY;
+        else moveTime = DAS_REPEAT_DELAY;
 
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             blocksGame.moveLeft();
-        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             blocksGame.moveRight();
         }
 
@@ -155,12 +203,13 @@ public class BlocksInputProcessor implements InputProcessor {
 
         for (Controller controller : Controllers.getControllers()) {
 
-            for (int buttonCode = controller.getMinButtonIndex(); buttonCode <= controller
-                    .getMaxButtonIndex(); buttonCode++) {
+            for (int buttonCode = controller.getMinButtonIndex();
+                    buttonCode <= controller.getMaxButtonIndex();
+                    buttonCode++) {
                 boolean p = controller.getButton(buttonCode);
 
                 if (p) {
-                    if(!pressedButtons.contains(buttonCode)) {
+                    if (!pressedButtons.contains(buttonCode)) {
                         pressedButtons.add(buttonCode);
                         buttonDown(controller, buttonCode);
                     }
@@ -182,7 +231,7 @@ public class BlocksInputProcessor implements InputProcessor {
             return;
         }
 
-        if(blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
+        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
             blocksGame.newGame();
             return;
         }
@@ -205,7 +254,7 @@ public class BlocksInputProcessor implements InputProcessor {
             blocksGame.rotateRight();
         } else if (buttonCode == controller.getMapping().buttonB) {
             blocksGame.rotateLeft();
-        }else if (buttonCode == controller.getMapping().buttonDpadRight) {
+        } else if (buttonCode == controller.getMapping().buttonDpadRight) {
             moveTime = DAS_INITIAL_DELAY;
             das = blocksGame.moveRight();
         } else if (buttonCode == controller.getMapping().buttonDpadLeft) {
