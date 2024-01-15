@@ -40,6 +40,8 @@ public class MenuScreen implements Screen {
 
     private Label title;
 
+    private Label version;
+
     public MenuScreen(TLLGame game) {
         this.game = game;
     }
@@ -196,6 +198,10 @@ public class MenuScreen implements Screen {
         inputListener = new MenuInputListener(game, menuGroup);
         menuButtonTable.addListener(inputListener);
 
+        version = new Label("v" + Config.getInstance().getProperty("version", "0") + " by Rafael García", skin, "default");
+        version.setPosition(0,0);
+        stage.addActor(version);
+
         updateTheme();
     }
 
@@ -209,6 +215,7 @@ public class MenuScreen implements Screen {
         style.fontColor = theme.scoresTextColor.cpy().mul(0.6f);
 
         title.getStyle().fontColor = theme.scoresTextColor;
+        version.getStyle().fontColor = theme.scoresTextColor;
     }
 
     @Override
