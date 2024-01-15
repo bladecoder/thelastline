@@ -24,12 +24,12 @@ public class BlocksRenderer {
 
     private final GameState gameState;
 
-    private int playfieldHeight;
-    private int playfieldWidth;
+    private float playfieldHeight;
+    private float playfieldWidth;
 
     private float scale = 1.0f;
 
-    private int tileSize;
+    private float tileSize;
 
     private float playfieldBorderWidth;
 
@@ -53,15 +53,20 @@ public class BlocksRenderer {
             this.background = atlas.findRegion("background");
             this.tile = atlas.findRegion("tile");
         }
-
-        playfieldBorderWidth = theme.playfieldBorderWidth;
     }
 
     public void resize(int width, int height) {
         screenWidth = width;
         screenHeight = height;
 
-        playfieldHeight = height - (int)DPIUtils.getMarginSize() * 2;
+        scale = height / 1080f;
+
+        playfieldBorderWidth = (int)(theme.playfieldBorderWidth * scale);
+
+        if(playfieldBorderWidth < 1)
+            playfieldBorderWidth = 1;
+
+        playfieldHeight = height - (int)DPIUtils.getMarginSize() * 2 - playfieldBorderWidth * 2;
 
         tileSize = playfieldHeight / gameState.playfield.getHeight();
         playfieldHeight = tileSize * gameState.playfield.getHeight(); // for perfect fit
@@ -71,14 +76,7 @@ public class BlocksRenderer {
 
         playfieldWidth = (int)(playfieldHeight * aspect);
 
-        scale = height / 1080f;
-
-        this.org.set((float) ((width - playfieldWidth) / 2.0), DPIUtils.getMarginSize());
-
-        playfieldBorderWidth = (int)(theme.playfieldBorderWidth * scale);
-
-        if(playfieldBorderWidth < 1)
-            playfieldBorderWidth = 1;
+        this.org.set((float) ((width - playfieldWidth) / 2.0), DPIUtils.getMarginSize() + playfieldBorderWidth);
 
         scoresBorderWidth = (int)(theme.scoresBorderWidth * scale);
 
@@ -192,10 +190,10 @@ public class BlocksRenderer {
 
             RectangleRenderer.draw(
                     batch,
-                    org.x + (playfieldWidth  - textLayoutBig.width) / 2 - DPIUtils.getMarginSize() * 2,
-                    org.y + (playfieldHeight - textLayoutBig.height) / 2 - DPIUtils.getMarginSize() * 2,
-                    textLayoutBig.width + DPIUtils.getMarginSize() * 4,
-                    textLayoutBig.height + DPIUtils.getMarginSize() * 4,
+                    org.x + (playfieldWidth  - textLayoutBig.width) / 2 - DPIUtils.getMarginSize() * 1.5f,
+                    org.y + (playfieldHeight - textLayoutBig.height) / 2 - DPIUtils.getMarginSize() * 1.5f,
+                    textLayoutBig.width + DPIUtils.getMarginSize() * 3,
+                    textLayoutBig.height + DPIUtils.getMarginSize() * 3,
                     c, scoresBorderWidth, theme.scoresBorderColor);
             bigFont.draw(batch, textLayoutBig,  org.x  + (float)playfieldWidth / 2, org.y + (float) playfieldHeight / 2 + textLayoutBig.height / 2);
         }
