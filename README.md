@@ -20,8 +20,11 @@ Useful links:
 - Ultra: score as many points as possible within a three-minute time span.
 
 ## TODO
-- [?] Lock down time (0.5 seconds) - Move time in the ground
 
+- [ ] Update README.md and make repo public
+- [ ] Android GHA
+- [ ] Rotate right por touch screens
+- [ ] Soft drop for touch screens
 - [ ] Set an image as title
 - [ ] Tint in themes. Atlas in default theme using tint
 - [ ] Tile color by type
@@ -29,8 +32,9 @@ Useful links:
 - [ ] Level up animation
 - [ ] Sound effects
 - [ ] Music
-- [ ] iOS version
 
+- [?] iOS version
+- [?] Lock down time (0.5 seconds) - Move time in the ground
 - [?] lines for level up depends on level (see NES)
 - [?] Bag randomizer
 - [?] Ghost piece
