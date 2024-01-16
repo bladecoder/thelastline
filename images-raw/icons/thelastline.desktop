@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=The Last Line
+Comment=The Last Line
+Exec=/home/deck/thelastline/bin/thelastline
+Terminal=false
+Categories=Games;
