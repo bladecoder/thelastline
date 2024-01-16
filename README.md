@@ -22,14 +22,13 @@ Useful links:
 ## TODO
 - [?] Lock down time (0.5 seconds) - Move time in the ground
 
-- [ ] Icons
-- [ ] Tint in themes. Atlas in default theme using tint.
+- [ ] Set an image as title
+- [ ] Tint in themes. Atlas in default theme using tint
 - [ ] Tile color by type
 - [ ] Move in menu with controller axis
 - [ ] Level up animation
 - [ ] Sound effects
 - [ ] Music
-- [ ] Android version
 - [ ] iOS version
 
 - [?] lines for level up depends on level (see NES)

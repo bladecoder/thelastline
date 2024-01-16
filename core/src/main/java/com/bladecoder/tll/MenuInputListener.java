@@ -1,5 +1,6 @@
 package com.bladecoder.tll;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controller;
@@ -31,24 +32,30 @@ public class MenuInputListener extends InputListener  {
 
     @Override
     public boolean keyDown(InputEvent event, int keycode) {
-        if(keycode == Input.Keys.UP) {
-            up();
-            return true;
-        } else if(keycode == Input.Keys.DOWN) {
-            down();
-            return true;
-        } else if(keycode == Input.Keys.ENTER || keycode == Input.Keys.RIGHT) {
-            click(false);
-            return true;
-        } else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.LEFT) {
-            click(true);
-            return true;
-        }  else if (keycode == Input.Keys.ESCAPE) {
-            game.setBlocksScreen();
-            return true;
-        } else if (keycode == Input.Keys.BACK) {
-            Gdx.app.exit();
-            return true;
+
+        switch (keycode) {
+            case Input.Keys.ESCAPE:
+            case Input.Keys.BACK:
+            case Input.Keys.MENU:
+                if(!game.isPaused())
+                    Gdx.app.exit();
+                else
+                    game.setBlocksScreen();
+                return true;
+            case  Input.Keys.UP:
+                up();
+                return true;
+            case Input.Keys.DOWN:
+                down();
+                return true;
+            case Input.Keys.ENTER:
+            case Input.Keys.RIGHT:
+                click(false);
+                return true;
+            case Input.Keys.SPACE:
+            case Input.Keys.LEFT:
+                click(true);
+                return true;
         }
 
         return false;

@@ -3,6 +3,7 @@ package com.bladecoder.tll;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -32,6 +33,9 @@ public class TLLGame extends Game {
 
         blocksScreen = new BlocksScreen(this);
         menuScreen = new MenuScreen(this);
+
+        Gdx.input.setCatchKey(Input.Keys.MENU, true);
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
 
         EngineLogger.setDebug();
         EngineLogger.debug("TLLGame created");

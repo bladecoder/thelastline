@@ -7,6 +7,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.IntSet;
 import com.bladecoder.tll.TLLGame;
+import com.bladecoder.tll.util.DPIUtils;
 import com.bladecoder.tll.util.EngineLogger;
 
 /**
@@ -16,8 +17,7 @@ public class BlocksInputProcessor implements InputProcessor {
 
     private static final float DAS_INITIAL_DELAY = 0.26f;
     private static final float DAS_REPEAT_DELAY = 0.05f;
-
-    private static final float DAS_MOVE_DELAY = 0.05f;
+    private static final float TOUCH_SCREEN_MOVE_DIST = 0.15f;
 
     private final BlocksLogic blocksGame;
 
@@ -35,6 +35,7 @@ public class BlocksInputProcessor implements InputProcessor {
     private int touchDownY;
 
     private boolean dragging;
+    private boolean drop;
 
     public BlocksInputProcessor(TLLGame game, BlocksLogic blocksGame) {
         this.blocksGame = blocksGame;
@@ -45,14 +46,13 @@ public class BlocksInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
-
-        if (i == Input.Keys.ESCAPE) {
-            blocksGame.pause();
-            game.setMenuScreen();
-            return true;
-        }
-
         switch (i) {
+            case Input.Keys.ESCAPE:
+            case Input.Keys.BACK:
+            case Input.Keys.MENU:
+                blocksGame.pause();
+                game.setMenuScreen();
+                break;
             case Input.Keys.LEFT:
                 moveTime = DAS_INITIAL_DELAY;
                 das = blocksGame.moveLeft();
@@ -112,6 +112,7 @@ public class BlocksInputProcessor implements InputProcessor {
 
         touchDownX = screenX;
         touchDownY = screenY;
+        drop = false;
 
         return true;
     }
@@ -124,6 +125,11 @@ public class BlocksInputProcessor implements InputProcessor {
         }
 
         if (movedPointer == pointer) {
+            if (drop) {
+                blocksGame.drop();
+                drop = false;
+            }
+
             movedPointer = -1;
             moveTime = 0;
             dragging = false;
@@ -145,17 +151,21 @@ public class BlocksInputProcessor implements InputProcessor {
         System.out.println("touchDragged: " + touchDownX + ", " + screenX + ", " + (touchDownX - screenX) + ", " + moveTime);
 
         dragging = true;
-        if(moveTime > 0) return true;
 
-        if(touchDownX - screenX > 5) {
-            moveTime = DAS_MOVE_DELAY;
+        if(DPIUtils.pixelsToInches(touchDownX - screenX) > TOUCH_SCREEN_MOVE_DIST) {
             blocksGame.moveLeft();
             touchDownX = screenX;
+            touchDownY = screenY;
             movedPointer = pointer;
-        } else if(touchDownX - screenX < -5) {
-            moveTime = DAS_MOVE_DELAY;
+        } else if(DPIUtils.pixelsToInches(touchDownX - screenX) < -TOUCH_SCREEN_MOVE_DIST) {
             blocksGame.moveRight();
             touchDownX = screenX;
+            touchDownY = screenY;
+            movedPointer = pointer;
+        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) < -TOUCH_SCREEN_MOVE_DIST) {
+            drop = true;
+            touchDownX = screenX;
+            touchDownY = screenY;
             movedPointer = pointer;
         }
 
