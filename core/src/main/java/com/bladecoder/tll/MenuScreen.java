@@ -124,7 +124,28 @@ public class MenuScreen implements Screen {
         menuButtonTable.add(gameModeButton);
         menuButtonTable.row();
 
+
+        Table levelTable = new Table();
+        levelTable.defaults().pad(DPIUtils.getSpacing()).align(Align.center);
         TextButton level = new TextButton("Level " + Config.getInstance().getPref("startLevel", 1), skin, "menu");
+
+        TextButton levelDown = new TextButton("<", skin, "menu");
+        levelDown.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int startLevel = Config.getInstance().getPref("startLevel", 1);
+
+                if(startLevel > 1)
+                    startLevel-=1;
+                else startLevel = BlocksLogic.MAX_LEVEL;
+
+                level.setText("Level " + startLevel);
+                Config.getInstance().setPref("startLevel", startLevel);
+                Config.getInstance().savePrefs();
+            }
+        });
+        levelTable.add(levelDown);
+
         level.getLabel().setAlignment(Align.center);
         level.addListener(new ClickListener() {
             @Override
@@ -146,8 +167,26 @@ public class MenuScreen implements Screen {
                 Config.getInstance().savePrefs();
             }
         });
+        levelTable.add(level);
 
-        menuButtonTable.add(level);
+        TextButton levelUp = new TextButton(">", skin, "menu");
+        levelUp.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int startLevel = Config.getInstance().getPref("startLevel", 1);
+
+                if (startLevel < BlocksLogic.MAX_LEVEL)
+                    startLevel += 1;
+                else startLevel = 1;
+
+                level.setText("Level " + startLevel);
+                Config.getInstance().setPref("startLevel", startLevel);
+                Config.getInstance().savePrefs();
+            }
+        });
+        levelTable.add(levelUp);
+
+        menuButtonTable.add(levelTable);
         menuButtonTable.row();
 
         TextButton themeButton = new TextButton("Theme " + THEMES[Config.getInstance().getPref("theme", 0)], skin, "menu");
@@ -199,7 +238,7 @@ public class MenuScreen implements Screen {
         menuButtonTable.addListener(inputListener);
 
         version = new Label("v" + Config.getInstance().getProperty("version", "0") + " by Rafael García", skin, "default");
-        version.setPosition(0,0);
+        version.setPosition(DPIUtils.getSpacing(),DPIUtils.getSpacing());
         stage.addActor(version);
 
         updateTheme();

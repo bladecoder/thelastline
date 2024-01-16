@@ -110,8 +110,11 @@ public class BlocksInputProcessor implements InputProcessor {
                              int pointer,
                              int button) {
 
-        touchDownX = screenX;
-        touchDownY = screenY;
+        if(!dragging) {
+            touchDownX = screenX;
+            touchDownY = screenY;
+        }
+
         drop = false;
 
         return true;
@@ -148,8 +151,6 @@ public class BlocksInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        System.out.println("touchDragged: " + touchDownX + ", " + screenX + ", " + (touchDownX - screenX) + ", " + moveTime);
-
         dragging = true;
 
         if(DPIUtils.pixelsToInches(touchDownX - screenX) > TOUCH_SCREEN_MOVE_DIST) {

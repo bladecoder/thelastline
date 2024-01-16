@@ -95,7 +95,7 @@ public class BlocksLogic {
 
             if (gameState.gameMode == GameState.GameMode.MARATHON) {
                 // level up every 10 lines
-                if (gameState.lines % 10 == 0) {
+                if (gameState.lines % 10 < removedRows) {
                     levelUp();
 
                     if (gameState.level > MAX_LEVEL) {
