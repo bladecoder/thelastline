@@ -30,7 +30,7 @@ Useful links:
 - [ ] Tile color by type
 - [ ] Move in menu with controller axis
 - [ ] Level up animation
-- [ ] Sound effects
+- [ ] Sound effects: move, rotate, hard drop, line clear, level up, game over, you win, lockdown, line clear
 - [ ] Music
 
 - [?] iOS version

@@ -1,5 +1,7 @@
 package com.bladecoder.tll.blocks;
 
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.async.AsyncTask;
 import com.bladecoder.tll.util.Config;
 
 public class BlocksLogic {
@@ -27,10 +29,13 @@ public class BlocksLogic {
 
     private int startLevel = 1;
 
-    private GameState gameState;
+    private final GameState gameState;
 
-    public BlocksLogic(GameState gameState) {
+    private final SoundManager soundManager;
+
+    public BlocksLogic(GameState gameState, SoundManager soundManager) {
         this.gameState = gameState;
+        this.soundManager = soundManager;
     }
 
     public void update(float delta) {
@@ -88,6 +93,16 @@ public class BlocksLogic {
         if (removedRows > 0) {
             gameState.lines += removedRows;
 
+            if (removedRows == 4) soundManager.tetris();
+            else {
+                    new Timer().scheduleTask(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            soundManager.lineClear();
+                        }
+                    }, 0f, 0.2f, removedRows - 1);
+            }
+
             if (removedRows == 1) gameState.points += 100 * gameState.level;
             else if (removedRows == 2) gameState.points += 300 * gameState.level;
             else if (removedRows == 3) gameState.points += 500 * gameState.level;
@@ -117,6 +132,8 @@ public class BlocksLogic {
     private void updateFalling(float delta) {
         if (isGameOver()) {
             gameState.state = GameState.State.GAME_OVER;
+            soundManager.youLose();
+            soundManager.musicStop();
             return;
         }
 
@@ -126,6 +143,8 @@ public class BlocksLogic {
 
         if (gameState.gameMode == GameState.GameMode.ULTRA && gameState.gameTime <= 0) {
             gameState.state = GameState.State.WIN;
+            soundManager.youWin();
+            soundManager.musicStop();
             return;
         }
 
@@ -148,6 +167,7 @@ public class BlocksLogic {
     }
 
     private void lockDown() {
+        soundManager.lockdown();
         gameState.playfield.lockDown(gameState.tetramino);
 
         if (gameState.playfield.isSomeRowFull()) {
@@ -180,6 +200,7 @@ public class BlocksLogic {
             }
         }
 
+        soundManager.move();
         gameState.tetramino.moveLeft();
 
         return true;
@@ -200,6 +221,7 @@ public class BlocksLogic {
             }
         }
 
+        soundManager.move();
         gameState.tetramino.moveRight();
 
         return true;
@@ -208,6 +230,7 @@ public class BlocksLogic {
     public void rotateLeft() {
         if ((gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) || isPaused()) return;
 
+        soundManager.rotate();
         gameState.tetramino.rotateLeft();
         if (isGameOver()) gameState.tetramino.rotateRight();
     }
@@ -215,6 +238,7 @@ public class BlocksLogic {
     public void rotateRight() {
         if ((gameState.state != GameState.State.FALLING && gameState.state != GameState.State.ARE) || isPaused()) return;
 
+        soundManager.rotate();
         gameState.tetramino.rotateRight();
         if (isGameOver()) gameState.tetramino.rotateLeft();
     }
@@ -249,6 +273,8 @@ public class BlocksLogic {
         gameState.state = GameState.State.ARE;
 
         gameState.tetramino.next();
+
+        soundManager.musicPlay();
     }
 
     boolean isGameOver() {
@@ -270,6 +296,7 @@ public class BlocksLogic {
     }
 
     private void levelUp() {
+        soundManager.levelUp();
         setLevel(gameState.level + 1);
     }
 
@@ -321,11 +348,18 @@ public class BlocksLogic {
     }
 
     public void pause() {
-        if (gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN)
+        if (gameState.state != GameState.State.GAME_OVER && gameState.state != GameState.State.WIN) {
             gameState.paused = true;
+            soundManager.musicPause();
+        }
     }
 
     public void resume() {
+        if(gameState.paused) {
+            gameState.paused = false;
+            soundManager.musicPlay();
+        }
+
         gameState.paused = false;
     }
 
