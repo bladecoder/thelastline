@@ -129,7 +129,7 @@ public class MenuScreen implements Screen {
         levelTable.defaults().pad(DPIUtils.getSpacing()).align(Align.center);
         TextButton level = new TextButton("Level " + Config.getInstance().getPref("startLevel", 1), skin, "menu");
 
-        TextButton levelDown = new TextButton("<", skin, "menu");
+        TextButton levelDown = new TextButton(" <", skin, "menu");
         levelDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -169,7 +169,7 @@ public class MenuScreen implements Screen {
         });
         levelTable.add(level);
 
-        TextButton levelUp = new TextButton(">", skin, "menu");
+        TextButton levelUp = new TextButton("> ", skin, "menu");
         levelUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
