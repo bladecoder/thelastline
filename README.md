@@ -30,13 +30,14 @@ Useful links:
 - [ ] Tile color by type
 - [ ] Move in menu with controller axis
 - [ ] Level up animation
-- [ ] Sound effects: move, rotate, hard drop, line clear, level up, game over, you win, lockdown, line clear
 - [ ] Music
 
-- [?] iOS version
-- [?] Lock down time (0.5 seconds) - Move time in the ground
-- [?] lines for level up depends on level (see NES)
-- [?] Bag randomizer
-- [?] Ghost piece
-- [?] Hold piece
-- [?] Next pieces
+## WON'T DO
+
+- [ ] iOS version
+- [ ] Lock down time (0.5 seconds) - Move time in the ground
+- [ ] lines for level up depends on level (see NES)
+- [ ] Bag randomizer
+- [ ] Ghost piece
+- [ ] Hold piece
+- [ ] Next pieces
