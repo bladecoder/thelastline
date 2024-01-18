@@ -36,6 +36,8 @@ jobs:
           VERSION=${{ github.event.release.tag_name}}
           VERSION=${VERSION:1 }
           # replace version property in tll.properties
+          ls
+          ls assets
           sed -i '' -e "s/version=.*/version=$VERSION/" assets/tll.properties
           ./gradlew lwjgl3:jpackageImage
           if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
