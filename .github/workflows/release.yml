@@ -59,6 +59,13 @@ jobs:
           else
             tar czf "$staging.tar.gz" "$staging"
             gh release upload ${{github.event.release.tag_name}} "$staging.tar.gz"
+          
+            # Upload Android app if ubuntu-latest
+            if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+              staging="thelastline-${{github.event.release.tag_name}}"
+              mv android/build/outputs/apk/release/android-release.apk "android/build/outputs/apk/release/thelastline-${{github.event.release.tag_name}}.apk"
+              gh release upload ${{github.event.release.tag_name}} "android/build/outputs/apk/release/thelastline-${{github.event.release.tag_name}}.apk"
+            fi
           fi
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
