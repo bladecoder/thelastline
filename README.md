@@ -15,7 +15,7 @@ Useful links:
 
 ## GAME TYPES
 
-- Marathon: 30 levels
+- Marathon: 30 levels. Level up every 10 lines.
 - Sprint: Choose level and try to clear 40 lines as fast as possible.
 - Ultra: score as many points as possible within a three-minute time span.
 
@@ -29,7 +29,6 @@ Useful links:
 - [ ] Tile color by type
 - [ ] Level up effect
 - [ ] Music
-- [?] Set an image as title
 - [ ] Move in menu with controller axis
 
 ## WON'T DO
