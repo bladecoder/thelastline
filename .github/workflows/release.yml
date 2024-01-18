@@ -33,9 +33,14 @@ jobs:
           java-version: 17
       - name: Build package
         run: |
+          VERSION=$(echo "${{ github.event.release.tag_name }}" | sed 's/v//')
+          # replace version property in tll.properties
+          sed -i '' -e "s/version=.*/version=$VERSION/" assets/tll.properties
           ./gradlew lwjgl3:jpackageImage
           if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-            ./gradlew -Pkeystore=$HOME/Dropbox/docs/ids/rgarcia_android.keystore  -PstorePassword=***REMOVED*** -Palias=robie1 -PkeyPassword=***REMOVED*** android:assembleRelease -Pversion=0.7 -PversionCode=7
+            echo "${{ secrets.KEYSTORE }}" | base64 --decode > keystore.jks
+            VERSION_CODE=$((`echo $VERSION | cut -d. -f1` * 100 + `echo $VERSION | cut -d. -f2`))
+            ./gradlew -Pkeystore=keystore.jks  -PstorePassword=${{ secrets.KEYSTORE_PASSWORD }} -Palias=${{ secrets.KEYALIAS }} -PkeyPassword=${{ secrets.KEY_PASSWORD }} android:assembleRelease -Pversion=$VERSION -PversionCode=$VERSION_CODE
           fi
         shell: bash
       - name: Upload app image to Github release
