@@ -43,9 +43,9 @@ jobs:
           fi
           ./gradlew lwjgl3:jpackageImage
           if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-            echo "${{ secrets.KEYSTORE }}" | base64 --decode > keystore.jks
+            echo "${{ secrets.KEYSTORE }}" | base64 --decode > $HOME/keystore.jks
             VERSION_CODE=$((`echo $VERSION | cut -d. -f1` * 100 + `echo $VERSION | cut -d. -f2`))
-            ./gradlew -Pkeystore=keystore.jks  -PstorePassword=${{ secrets.KEYSTORE_PASSWORD }} -Palias=${{ secrets.KEYALIAS }} -PkeyPassword=${{ secrets.KEY_PASSWORD }} android:assembleRelease -Pversion=$VERSION -PversionCode=$VERSION_CODE
+            ./gradlew -Pkeystore=$HOME/keystore.jks  -PstorePassword=${{ secrets.KEYSTORE_PASSWORD }} -Palias=${{ secrets.KEYALIAS }} -PkeyPassword=${{ secrets.KEY_PASSWORD }} android:assembleRelease -Pversion=$VERSION -PversionCode=$VERSION_CODE
           fi
         shell: bash
       - name: Upload app image to Github release
