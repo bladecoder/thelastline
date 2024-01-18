@@ -25,12 +25,12 @@ Useful links:
 - [ ] Android GHA
 - [ ] Rotate right por touch screens
 - [ ] Soft drop for touch screens
-- [ ] Set an image as title
 - [ ] Tint in themes. Atlas in default theme using tint
 - [ ] Tile color by type
-- [ ] Move in menu with controller axis
-- [ ] Level up animation
+- [ ] Level up effect
 - [ ] Music
+- [?] Set an image as title
+- [ ] Move in menu with controller axis
 
 ## WON'T DO
 
