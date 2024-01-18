@@ -22,7 +22,6 @@ Useful links:
 ## TODO
 
 - [ ] Update README.md and make repo public
-- [ ] Android GHA
 - [ ] Rotate right por touch screens
 - [ ] Soft drop for touch screens
 - [ ] Tint in themes. Atlas in default theme using tint
