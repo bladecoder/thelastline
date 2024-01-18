@@ -1,7 +1,4 @@
-lineclear2.wav
-youlose2.wav
 rotate.wav
-lineclear3.wav
 move.wav
 youlose.wav
 tetris.wav
