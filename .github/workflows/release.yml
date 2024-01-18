@@ -36,9 +36,11 @@ jobs:
           VERSION=${{ github.event.release.tag_name}}
           VERSION=${VERSION:1 }
           # replace version property in tll.properties
-          ls
-          ls assets
-          sed -i '' -e "s/version=.*/version=$VERSION/" assets/tll.properties
+          if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' -e "s/version=.*/version=$VERSION/" assets/tll.properties
+          else
+            sed -i -e "s/version=.*/version=$VERSION/" assets/tll.properties
+          fi
           ./gradlew lwjgl3:jpackageImage
           if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
             echo "${{ secrets.KEYSTORE }}" | base64 --decode > keystore.jks
