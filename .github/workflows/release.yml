@@ -33,7 +33,7 @@ jobs:
           java-version: 17
       - name: Build package
         run: |
-          VERSION=$(echo "${{ github.event.release.tag_name }}" | sed 's/v//')
+          VERSION=${{ github.event.release.tag_name:1 }}
           # replace version property in tll.properties
           sed -i '' -e "s/version=.*/version=$VERSION/" assets/tll.properties
           ./gradlew lwjgl3:jpackageImage
