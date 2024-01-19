@@ -2,9 +2,9 @@
 
 BitmapFont: {
 	default: {file: fonts/Roboto-Regular.ttf, size: 14},
-	big-font: {file: fonts/Kenney-Future-Narrow.ttf, size: 35},
-	small-font: {file: fonts/Kenney-Future-Narrow.ttf, size: 20},
-	tiny-font: {file: fonts/Kenney-Future-Narrow.ttf, size: 14},
+	big-font: {file: fonts/Kenney-Future-Narrow.ttf, size: 36},
+	small-font: {file: fonts/Kenney-Future-Narrow.ttf, size: 22},
+	tiny-font: {file: fonts/Kenney-Future-Narrow.ttf, size: 12},
 	menu-font: {file: fonts/Roboto-Black.ttf, size: 25}
 },
 
