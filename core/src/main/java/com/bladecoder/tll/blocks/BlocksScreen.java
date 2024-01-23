@@ -2,7 +2,6 @@ package com.bladecoder.tll.blocks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,8 +15,6 @@ public class BlocksScreen implements Screen {
     private final TLLGame game;
     private final Viewport viewport = new ScreenViewport();
     private final SpriteBatch batch = new SpriteBatch();
-
-    private TextureAtlas atlas;
 
     private final SoundManager soundManager = new SoundManager();
     private Theme theme = Theme.DEFAULT;
@@ -36,13 +33,9 @@ public class BlocksScreen implements Screen {
     public void show() {
         theme = Theme.THEMES[Config.getInstance().getPref("theme", 0)];
 
-        if(theme.atlas != null) {
-            atlas = new TextureAtlas(theme.atlas);
-        }
-
         soundManager.load();
 
-        blocksRenderer = new BlocksRenderer(atlas, game.getSkin(), gameState, theme);
+        blocksRenderer = new BlocksRenderer(game.getSkin(), gameState, theme);
         Gdx.input.setInputProcessor(inputProcessor);
 
         if(gameState.paused)
@@ -87,10 +80,6 @@ public class BlocksScreen implements Screen {
 
     @Override
     public void hide() {
-        if(atlas != null) {
-            atlas.dispose();
-            atlas = null;
-        }
         soundManager.dispose();
     }
 
