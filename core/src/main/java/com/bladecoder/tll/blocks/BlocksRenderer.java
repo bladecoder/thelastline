@@ -20,7 +20,6 @@ public class BlocksRenderer {
     private final GlyphLayout textLayoutSmall = new GlyphLayout();
     private final GlyphLayout textLayoutBig = new GlyphLayout();
     private TextureAtlas.AtlasRegion tile;
-    private TextureAtlas.AtlasRegion background;
     private final Vector2 org = new Vector2();
 
     private final GameState gameState;
@@ -49,14 +48,14 @@ public class BlocksRenderer {
     private float scoresWidth2; // sides for vertical mode, right for horizontal mode
 
 
-    public BlocksRenderer(TextureAtlas atlas, BladeSkin skin, GameState gameState, Theme theme) {
+    public BlocksRenderer(BladeSkin skin, GameState gameState, Theme theme) {
         this.gameState = gameState;
         this.theme = theme;
         this.skin = skin;
+        this.tile = null;
 
-        if(atlas != null) {
-            this.background = atlas.findRegion("background");
-            this.tile = atlas.findRegion("tile");
+        if(theme.tileName != null) {
+            this.tile = skin.getAtlas().findRegion(theme.tileName);
         }
     }
 
@@ -126,11 +125,6 @@ public class BlocksRenderer {
 
     public void render(SpriteBatch batch) {
 
-        // draw background
-        if(background != null) {
-            batch.draw(background, 0, 0, screenWidth, screenHeight);
-        }
-
         // draw playfield border
         RectangleRenderer.draw(batch, org.x - playfieldBorderWidth, org.y - playfieldBorderWidth, playfieldWidth + playfieldBorderWidth * 2, playfieldHeight + playfieldBorderWidth * 2, theme.playfieldColor, playfieldBorderWidth, theme.playfieldBorderColor);
 
@@ -145,7 +139,7 @@ public class BlocksRenderer {
         for (int y = 0; y < gameState.playfield.getHeight(); y++) {
             for (int x = 0; x < gameState.playfield.getWidth(); x++) {
                 if (gameState.playfield.get(x, y) != 0) {
-                    renderTile(batch, org.x + x * tileSize, org.y + y * tileSize);
+                    renderTile(batch, org.x + x * tileSize, org.y + y * tileSize, gameState.playfield.get(x, y));
                 }
             }
         }
@@ -197,7 +191,7 @@ public class BlocksRenderer {
         for (int y = 0; y < gameState.tetramino.getCurrent().length; y++) {
             for (int x = 0; x < gameState.tetramino.getCurrent()[y].length; x++) {
                 if (!gameState.tetramino.isFree(x, y) && gameState.tetramino.getPos().y + y < gameState.playfield.getHeight()) {
-                    renderTile(batch, posX + x * tileSize, posY + y * tileSize);
+                    renderTile(batch, posX + x * tileSize, posY + y * tileSize, gameState.tetramino.get(x, y));
                 }
             }
         }
@@ -330,7 +324,7 @@ public class BlocksRenderer {
             boolean empty = true;
             for (int x = 0; x < next[y].length; x++) {
                 if (next[y][x] != 0) {
-                    renderTile(batch, posx + x * tileSize, posy + y * tileSize);
+                    renderTile(batch, posx + x * tileSize, posy + y * tileSize, next[y][x]);
                     empty = false;
                 }
             }
@@ -376,11 +370,13 @@ public class BlocksRenderer {
         return finalWidth;
     }
 
-    private void renderTile(SpriteBatch batch, float x, float y) {
-        if(tile != null)
+    private void renderTile(SpriteBatch batch, float x, float y, int type) {
+        if(tile != null) {
+            batch.setColor(theme.tileColors[(type - 1) % theme.tileColors.length]);
             batch.draw(tile, x, y, tileSize, tileSize);
-        else
-            RectangleRenderer.draw(batch, x, y, tileSize, tileSize, theme.tileColor, theme.tileBorderWidth * scale, theme.tileBorderColor);
+            batch.setColor(Color.WHITE);
+        } else
+            RectangleRenderer.draw(batch, x, y, tileSize, tileSize, theme.tileColors[(type - 1) % theme.tileColors.length], theme.tileBorderWidth * scale, theme.tileBorderColor);
     }
 
     private void renderGrid(SpriteBatch batch) {

@@ -24,18 +24,17 @@ Useful links:
 - [ ] Update README.md and make repo public
 - [ ] Rotate right por touch screens
 - [ ] Soft drop for touch screens
-- [ ] Tint in themes. Atlas in default theme using tint
-- [ ] Tile color by type
 - [ ] Level up effect
 - [ ] Music
 - [ ] Move in menu with controller axis
+- [ ] iOS version
+- [ ] Lines for level up depends on level (see NES)
+
 
 ## WON'T DO
 
-- [ ] iOS version
-- [ ] Lock down time (0.5 seconds) - Move time in the ground
-- [ ] lines for level up depends on level (see NES)
-- [ ] Bag randomizer
-- [ ] Ghost piece
-- [ ] Hold piece
-- [ ] Next pieces
+- Lock down time (0.5 seconds) - Move time in the ground
+- Bag randomizer
+- Ghost piece
+- Hold piece
+- Next pieces
