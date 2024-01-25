@@ -1,6 +1,5 @@
 package com.bladecoder.tll;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controller;
@@ -15,13 +14,14 @@ import com.badlogic.gdx.utils.IntSet;
 import com.bladecoder.tll.util.EngineLogger;
 
 public class MenuInputListener extends InputListener  {
-    public static final float THUMBSTICKVELOCITY = 12f * 60f;
-
     private final TLLGame game;
 
     private final IntSet pressedButtons = new IntSet();
 
     private final ButtonGroup<Button> menu;
+
+    private final static float AXIS_DELAY = 0.4f;
+    private float axisTime;
 
     public MenuInputListener(TLLGame game, ButtonGroup<Button> menu) {
         this.game = game;
@@ -62,6 +62,7 @@ public class MenuInputListener extends InputListener  {
     }
 
     public void update(float delta) {
+        updateAxis(delta);
         updateButtons();
     }
 
@@ -107,14 +108,28 @@ public class MenuInputListener extends InputListener  {
     }
 
     private void updateAxis(float delta) {
-//        for (Controller controller : Controllers.getControllers()) {
-//            vx += controller.getAxis(controller.getMapping().axisLeftX) * v;
-//            vy += controller.getAxis(controller.getMapping().axisLeftY) * v;
-//            vx += controller.getAxis(controller.getMapping().axisRightX) * v / 2f;
-//            vy += controller.getAxis(controller.getMapping().axisRightY) * v / 2f;
-//        }
-    }
+        axisTime -= delta;
 
+        if(axisTime > 0)
+            return;
+
+        for (Controller controller : Controllers.getControllers()) {
+            // move up and down
+            if (controller.getAxis(controller.getMapping().axisLeftY) < -0.5f) {
+                axisTime = AXIS_DELAY;
+                up();
+            } else if (controller.getAxis(controller.getMapping().axisLeftY) > 0.5f) {
+                axisTime = AXIS_DELAY;
+                down();
+            } else if (controller.getAxis(controller.getMapping().axisLeftX) < -0.5f) {
+                axisTime = AXIS_DELAY;
+                click(true);
+            } else if (controller.getAxis(controller.getMapping().axisLeftX) > 0.5f) {
+                axisTime = AXIS_DELAY;
+                click(false);
+            }
+        }
+    }
 
     private Button getButton(int index) {
         return menu.getButtons().get(index);
