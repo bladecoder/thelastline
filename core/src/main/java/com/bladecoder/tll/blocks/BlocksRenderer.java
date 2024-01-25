@@ -132,6 +132,11 @@ public class BlocksRenderer {
         if (theme.gridColor != null)
             renderGrid(batch);
 
+        // level up effect: draw a full playfield rectangle
+        if(gameState.state == GameState.State.LEVEL_UP) {
+            RectangleRenderer.draw(batch, org.x, org.y, tileSize * gameState.playfield.getWidth(), tileSize * gameState.playfield.getHeight(), theme.clearLineColor);
+        }
+
         // render gameState.tetramino
         renderTetramino(batch);
 

@@ -53,6 +53,9 @@ public class BlocksLogic {
             case LINE_CLEAR:
                 updateLineClear(delta);
                 break;
+            case LEVEL_UP:
+                updateLevelUp(delta);
+                break;
             case FALLING:
                 updateFalling(delta);
                 break;
@@ -63,6 +66,15 @@ public class BlocksLogic {
     }
 
     private void updateARE(float delta) {
+        stateTimer -= delta;
+
+        if (stateTimer < 0) {
+            stateTimer = 0;
+            gameState.state = GameState.State.FALLING;
+        }
+    }
+
+    private void updateLevelUp(float delta) {
         stateTimer -= delta;
 
         if (stateTimer < 0) {
@@ -296,6 +308,8 @@ public class BlocksLogic {
     }
 
     private void levelUp() {
+        stateTimer = LINE_CLEAR_TIME;
+        gameState.state = GameState.State.LEVEL_UP;
         soundManager.levelUp();
         setLevel(gameState.level + 1);
     }
