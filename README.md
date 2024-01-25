@@ -33,7 +33,6 @@ Useful links:
 - [ ] Soft drop for touch screens
 - [ ] Level up effect
 - [ ] Music
-- [ ] Move in menu with controller axis
 - [ ] Lines for level up depends on level (see NES)
 - [ ] iOS version
 

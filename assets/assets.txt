@@ -4,10 +4,8 @@ youlose.wav
 tetris.wav
 youwin.wav
 tll.properties
-theme-mono.png
 music.mp3
 ui.json
-theme-mono.atlas
 lineclear.wav
 ui.atlas
 lockdown.wav

@@ -19,9 +19,13 @@ public class BlocksInputProcessor implements InputProcessor {
     private static final float DAS_REPEAT_DELAY = 0.05f;
     private static final float TOUCH_SCREEN_MOVE_DIST = 0.15f;
 
+    private static final float DROP_DELAY = 0.5f;
+
     private final BlocksLogic blocksGame;
 
     private float moveTime;
+
+    private float dropTime;
 
     private final IntSet pressedButtons = new IntSet();
 
@@ -36,6 +40,8 @@ public class BlocksInputProcessor implements InputProcessor {
 
     private boolean dragging;
     private boolean drop;
+
+    private boolean axisSoftDrop;
 
     public BlocksInputProcessor(TLLGame game, BlocksLogic blocksGame) {
         this.blocksGame = blocksGame;
@@ -193,6 +199,7 @@ public class BlocksInputProcessor implements InputProcessor {
         }
 
         updateButtons();
+        updateAxis(delta);
 
         // if the block could not move, we don't wait for the DAS to allow the kick of the block
         // while the button is pressed. If not, the block will be locked while waiting for the DAS.
@@ -208,6 +215,49 @@ public class BlocksInputProcessor implements InputProcessor {
         }
 
         updateDPad();
+    }
+
+    private void updateAxis(float delta) {
+        for (Controller controller : Controllers.getControllers()) {
+
+            // handle drop
+            dropTime -= delta;
+
+            float axisYValue = controller.getAxis(controller.getMapping().axisLeftY);
+
+            if(axisSoftDrop && axisYValue < 0.5) {
+                blocksGame.setSoftDrop(false);
+                axisSoftDrop = false;
+            }
+
+            if (dropTime <= 0 && axisYValue > 0.6) {
+                blocksGame.setSoftDrop(true);
+                axisSoftDrop = true;
+                dropTime = DROP_DELAY;
+            } else if (dropTime <= 0 && axisYValue < -0.6f) {
+                blocksGame.drop();
+                dropTime = DROP_DELAY;
+            }
+
+            if (das && moveTime > 0) return;
+
+            float axisXValue = controller.getAxis(controller.getMapping().axisLeftX);
+
+            if (axisXValue < -0.2f && axisXValue >= -0.7f) {
+                moveTime = DAS_INITIAL_DELAY;
+                das = blocksGame.moveLeft();
+            } else if (axisXValue > 0.2f && axisXValue <= 0.7) {
+                moveTime = DAS_INITIAL_DELAY;
+                das = blocksGame.moveRight();
+            }else if (axisXValue < -0.7f) {
+                moveTime = DAS_REPEAT_DELAY;
+                das = blocksGame.moveLeft();
+            } else if (axisXValue > 0.7f) {
+                moveTime = DAS_REPEAT_DELAY;
+                das = blocksGame.moveRight();
+            }
+
+        }
     }
 
     private void updateButtons() {
