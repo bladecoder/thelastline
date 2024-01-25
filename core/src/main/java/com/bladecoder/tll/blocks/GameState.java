@@ -16,6 +16,7 @@ public class GameState {
         FALLING,
         ARE,
         LINE_CLEAR,
+        LEVEL_UP,
         GAME_OVER,
         WIN
     }
