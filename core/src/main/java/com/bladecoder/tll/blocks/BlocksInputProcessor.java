@@ -179,7 +179,7 @@ public class BlocksInputProcessor implements InputProcessor {
             touchDownX = screenX;
             touchDownY = screenY;
             movedPointer = pointer;
-        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) < TOUCH_SCREEN_MOVE_DIST) {
+        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) > TOUCH_SCREEN_MOVE_DIST) {
             drop = true;
             touchDownX = screenX;
             touchDownY = screenY;
