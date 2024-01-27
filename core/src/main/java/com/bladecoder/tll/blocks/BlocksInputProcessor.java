@@ -25,8 +25,6 @@ public class BlocksInputProcessor implements InputProcessor {
 
     private float moveTime;
 
-    private float dropTime;
-
     private final IntSet pressedButtons = new IntSet();
 
     private final TLLGame game;
@@ -39,8 +37,13 @@ public class BlocksInputProcessor implements InputProcessor {
     private int touchDownY;
 
     private boolean dragging;
+
+    private float dropTime;
+
+    // for touch screen, if true when touch up, drop the block
     private boolean drop;
 
+    // soft drop set by axis
     private boolean axisSoftDrop;
 
     public BlocksInputProcessor(TLLGame game, BlocksLogic blocksGame) {
@@ -139,6 +142,8 @@ public class BlocksInputProcessor implements InputProcessor {
                 drop = false;
             }
 
+            blocksGame.setSoftDrop(false);
+
             movedPointer = -1;
             moveTime = 0;
             dragging = false;
@@ -170,10 +175,21 @@ public class BlocksInputProcessor implements InputProcessor {
             touchDownY = screenY;
             movedPointer = pointer;
         } else if(DPIUtils.pixelsToInches(touchDownY - screenY) < -TOUCH_SCREEN_MOVE_DIST) {
+            blocksGame.setSoftDrop(true);
+            touchDownX = screenX;
+            touchDownY = screenY;
+            movedPointer = pointer;
+        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) < TOUCH_SCREEN_MOVE_DIST) {
             drop = true;
             touchDownX = screenX;
             touchDownY = screenY;
             movedPointer = pointer;
+        }
+
+        // To avoid the block to drop/softdrop in the next tetramino
+        if(blocksGame.getState() != GameState.State.FALLING) {
+            drop = false;
+            blocksGame.setSoftDrop(false);
         }
 
         return true;

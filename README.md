@@ -30,9 +30,8 @@ Useful links:
 ## Nice to have
 
 - [ ] Rotate right por touch screens
-- [ ] Soft drop for touch screens
-- [ ] Level up effect
 - [ ] Music
+- [ ] Statistics screen
 - [ ] Lines for level up depends on level (see NES)
 - [ ] iOS version
 
