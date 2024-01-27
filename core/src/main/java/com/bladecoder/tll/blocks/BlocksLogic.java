@@ -307,6 +307,10 @@ public class BlocksLogic {
         softdrop = value;
     }
 
+    public boolean isSoftDrop() {
+        return softdrop;
+    }
+
     private void levelUp() {
         stateTimer = LINE_CLEAR_TIME;
         gameState.state = GameState.State.LEVEL_UP;

@@ -164,23 +164,38 @@ public class BlocksInputProcessor implements InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         dragging = true;
 
+        System.out.println("touchDragged: " + screenX + ", " + screenY + ", " + pointer);
+
         if(DPIUtils.pixelsToInches(touchDownX - screenX) > TOUCH_SCREEN_MOVE_DIST) {
+            if(blocksGame.isSoftDrop()) {
+                blocksGame.setSoftDrop(false);
+            }
+
             blocksGame.moveLeft();
             touchDownX = screenX;
             touchDownY = screenY;
             movedPointer = pointer;
         } else if(DPIUtils.pixelsToInches(touchDownX - screenX) < -TOUCH_SCREEN_MOVE_DIST) {
+            if(blocksGame.isSoftDrop()) {
+                blocksGame.setSoftDrop(false);
+            }
+
             blocksGame.moveRight();
             touchDownX = screenX;
             touchDownY = screenY;
             movedPointer = pointer;
-        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) < -TOUCH_SCREEN_MOVE_DIST) {
+        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) < -TOUCH_SCREEN_MOVE_DIST * 2) {
             blocksGame.setSoftDrop(true);
             touchDownX = screenX;
             touchDownY = screenY;
             movedPointer = pointer;
-        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) > TOUCH_SCREEN_MOVE_DIST) {
-            drop = true;
+        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) > TOUCH_SCREEN_MOVE_DIST * 5) {
+            if(blocksGame.isSoftDrop()) {
+                blocksGame.setSoftDrop(false);
+            } else {
+                drop = true;
+            }
+
             touchDownX = screenX;
             touchDownY = screenY;
             movedPointer = pointer;
