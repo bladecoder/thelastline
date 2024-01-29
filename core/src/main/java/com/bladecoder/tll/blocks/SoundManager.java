@@ -7,7 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 public class SoundManager {
 
     private final static String[] MUSIC_FILES = {"8bitmelody.mp3", "hauntedcastle.mp3", "newbattle.mp3"};
-    private final static float[] MUSIC_VOLUMES = {0.3f, 0.5f, 0.9f};
+    private final static float[] MUSIC_VOLUMES = {0.3f, 0.3f, 0.9f};
 
     private Sound lockdownSound;
     private Sound rotateSound;
