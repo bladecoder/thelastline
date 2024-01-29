@@ -97,8 +97,6 @@ if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_14)) {
       } else if (os.contains('mac')) {
 // If you are making a jpackage image on macOS, the below line should work thanks to StartupHelper.
         imageOptions = ["--icon", "icons/logo.icns", "--java-options", "-XstartOnFirstThread"]
-// If the above line doesn't produce a runnable executable, you can try using the below line instead of the above one.
-//        imageOptions = ["--icon", "icons/logo.icns", "--java-options", "\"-XstartOnFirstThread\""]
       }
     }
   }
