@@ -6,11 +6,8 @@ import com.badlogic.gdx.audio.Sound;
 
 public class SoundManager {
 
-    private final static String SLOW_MUSIC_FILE = "8bitmelody.mp3";
-    private final static String MEDIUM_MUSIC_FILE = "hauntedcastle.mp3";
-    private final static String FAST_MUSIC_FILE = "newbattle.mp3";
-
-    private final static float MUSIC_VOLUME = 0.3f;
+    private final static String[] MUSIC_FILES = {"8bitmelody.mp3", "hauntedcastle.mp3", "newbattle.mp3"};
+    private final static float[] MUSIC_VOLUMES = {0.3f, 0.5f, 0.9f};
 
     private Sound lockdownSound;
     private Sound rotateSound;
@@ -89,17 +86,11 @@ public class SoundManager {
 
         String musicFile;
 
-        if(level < 10) {
-            musicFile = SLOW_MUSIC_FILE;
-        } else if(level < 20) {
-            musicFile = MEDIUM_MUSIC_FILE;
-        } else {
-            musicFile = FAST_MUSIC_FILE;
-        }
+        musicFile = MUSIC_FILES[(level - 1) / 10];
 
         music = Gdx.audio.newMusic(Gdx.files.internal(musicFile));
 
-        music.setVolume(MUSIC_VOLUME);
+        music.setVolume(MUSIC_VOLUMES[(level - 1) / 10]);
         music.setLooping(true);
         music.play();
     }
