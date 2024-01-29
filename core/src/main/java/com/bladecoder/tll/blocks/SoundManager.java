@@ -5,6 +5,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 public class SoundManager {
+
+    private final static String SLOW_MUSIC_FILE = "8bitmelody.mp3";
+    private final static String MEDIUM_MUSIC_FILE = "hauntedcastle.mp3";
+    private final static String FAST_MUSIC_FILE = "newbattle.mp3";
+
+    private final static float MUSIC_VOLUME = 0.3f;
+
     private Sound lockdownSound;
     private Sound rotateSound;
 
@@ -20,6 +27,7 @@ public class SoundManager {
     private Sound tetrisSound;
 
     private Music music;
+    private boolean musicEnabled = true;
 
     public void load() {
         lockdownSound = Gdx.audio.newSound(Gdx.files.internal("lockdown.wav"));
@@ -30,10 +38,6 @@ public class SoundManager {
         youWinSound = Gdx.audio.newSound(Gdx.files.internal("youwin.wav"));
         levelUpSound = Gdx.audio.newSound(Gdx.files.internal("levelup.wav"));
         tetrisSound = Gdx.audio.newSound(Gdx.files.internal("tetris.wav"));
-
-        music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-        music.setLooping(true);
-        music.setVolume(0.5f);
     }
 
     public void lockdown() {
@@ -69,15 +73,40 @@ public class SoundManager {
     }
 
     public void musicPause() {
-        music.pause();
+        if(music != null)
+            music.pause();
     }
 
-    public void musicPlay() {
-        //music.play();
+    public void musicPlay(int level) {
+
+        if(!musicEnabled)
+            return;
+
+        if(music != null) {
+            music.stop();
+            music.dispose();
+        }
+
+        String musicFile;
+
+        if(level < 10) {
+            musicFile = SLOW_MUSIC_FILE;
+        } else if(level < 20) {
+            musicFile = MEDIUM_MUSIC_FILE;
+        } else {
+            musicFile = FAST_MUSIC_FILE;
+        }
+
+        music = Gdx.audio.newMusic(Gdx.files.internal(musicFile));
+
+        music.setVolume(MUSIC_VOLUME);
+        music.setLooping(true);
+        music.play();
     }
 
     public void musicStop() {
-        music.stop();
+        if(music != null)
+            music.stop();
     }
 
 
@@ -91,7 +120,19 @@ public class SoundManager {
         levelUpSound.dispose();
         tetrisSound.dispose();
 
-        music.stop();
-        music.dispose();
+        if(music != null) {
+            music.stop();
+            music.dispose();
+        }
+    }
+
+    public void setMusic(boolean enabled) {
+        musicEnabled = enabled;
+
+        if(!musicEnabled && music != null) {
+            music.stop();
+            music.dispose();
+            music = null;
+        }
     }
 }

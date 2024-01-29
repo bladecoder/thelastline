@@ -4,13 +4,15 @@ youlose.wav
 tetris.wav
 youwin.wav
 tll.properties
-music.mp3
 ui.json
 lineclear.wav
 ui.atlas
 lockdown.wav
 ui.png
+8bitmelody.mp3
 fonts/Roboto-Regular.ttf
 fonts/Kenney-Future-Narrow.ttf
 fonts/Roboto-Black.ttf
+hauntedcastle.mp3
 levelup.wav
+newbattle.mp3
