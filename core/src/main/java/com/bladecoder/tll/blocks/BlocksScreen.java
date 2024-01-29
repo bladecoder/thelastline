@@ -1,6 +1,7 @@
 package com.bladecoder.tll.blocks;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,6 +25,8 @@ public class BlocksScreen implements Screen {
     private BlocksRenderer blocksRenderer;
     private final BlocksInputProcessor inputProcessor;
 
+    private BlocksUI blocksUI;
+
     public BlocksScreen(TLLGame game) {
         this.game = game;
         inputProcessor = new BlocksInputProcessor(game, blocksLogic);
@@ -35,8 +38,14 @@ public class BlocksScreen implements Screen {
 
         soundManager.load();
 
+        blocksUI = new BlocksUI(game.getSkin(), game, blocksLogic, theme, viewport, batch);
+
         blocksRenderer = new BlocksRenderer(game.getSkin(), gameState, theme);
-        Gdx.input.setInputProcessor(inputProcessor);
+
+        final InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(blocksUI.getStage());
+        multiplexer.addProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(multiplexer);
 
         if(gameState.paused)
             blocksLogic.resume();
@@ -58,14 +67,16 @@ public class BlocksScreen implements Screen {
         inputProcessor.update(delta);
         blocksLogic.update(delta);
         blocksRenderer.render(batch);
-
         batch.end();
+
+        blocksUI.render(delta);
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         blocksRenderer.resize((int)viewport.getWorldWidth(), (int)viewport.getWorldHeight());
+        blocksUI.resize((int)viewport.getWorldWidth(), (int)viewport.getWorldHeight());
     }
 
     @Override

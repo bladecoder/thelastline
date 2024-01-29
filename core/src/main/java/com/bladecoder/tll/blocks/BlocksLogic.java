@@ -287,6 +287,7 @@ public class BlocksLogic {
         gameState.tetramino.next();
 
         soundManager.musicPlay();
+        gameState.paused = false;
     }
 
     boolean isGameOver() {

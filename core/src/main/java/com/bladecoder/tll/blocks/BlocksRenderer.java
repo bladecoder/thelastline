@@ -164,29 +164,6 @@ public class BlocksRenderer {
             renderScoresV(batch);
         else
             renderScoresH(batch);
-
-        // draw game over or win text
-        if (gameState.state == GameState.State.GAME_OVER || gameState.state == GameState.State.WIN) {
-            String s = "GAME OVER";
-
-            if (gameState.state == GameState.State.WIN) s = "YOU WIN!";
-
-            textLayoutBig.setText(bigFont, s, theme.scoresTextColor, 0.0f, Align.center, false);
-
-            Color c = theme.scoresBgColor;
-
-            if(c == null)
-            	c = theme.bgColor;
-
-            RectangleRenderer.draw(
-                    batch,
-                    org.x + (playfieldWidth  - textLayoutBig.width) / 2 - DPIUtils.getMarginSize() * 1.5f,
-                    org.y + (playfieldHeight - textLayoutBig.height) / 2 - DPIUtils.getMarginSize() * 1.5f,
-                    textLayoutBig.width + DPIUtils.getMarginSize() * 3,
-                    textLayoutBig.height + DPIUtils.getMarginSize() * 3,
-                    c, scoresBorderWidth, theme.scoresBorderColor);
-            bigFont.draw(batch, textLayoutBig,  org.x  + (float)playfieldWidth / 2, org.y + (float) playfieldHeight / 2 + textLayoutBig.height / 2);
-        }
     }
 
     private void renderTetramino(SpriteBatch batch) {

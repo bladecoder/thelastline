@@ -1,21 +1,30 @@
 
 ui.png
-size: 126, 55
+size: 102, 140
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-border_black_rect
-  rotate: false
-  xy: 102, 31
-  size: 22, 22
-  orig: 22, 22
-  offset: 0, 0
-  index: -1
 border_rect
   rotate: false
-  xy: 102, 7
-  size: 22, 22
-  orig: 22, 22
+  xy: 67, 76
+  size: 29, 29
+  split: 5, 5, 5, 5
+  orig: 29, 29
+  offset: 0, 0
+  index: -1
+pause
+  rotate: false
+  xy: 2, 55
+  size: 63, 83
+  orig: 123, 123
+  offset: 30, 19
+  index: -1
+rect
+  rotate: false
+  xy: 67, 107
+  size: 31, 31
+  split: 5, 5, 5, 4
+  orig: 31, 31
   offset: 0, 0
   index: -1
 tile
