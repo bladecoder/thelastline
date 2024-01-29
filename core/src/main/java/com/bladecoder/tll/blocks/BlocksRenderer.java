@@ -189,11 +189,6 @@ public class BlocksRenderer {
         // draw num. lines
         posy -= scoresHeight - scoresBorderWidth;
 
-        // No margin needed if border is not drawn
-        if(scoresBorderWidth < 1 || theme.scoresBorderColor == null) {
-            posx += DPIUtils.getSpacing();
-        }
-
         scoresWidth1 = renderScoreText(batch, posx, posy, scoresWidth1, scoresHeight, "LINES", "" + gameState.lines, theme.scoresTextColor);
 
         // draw level

@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.IntSet;
-import com.bladecoder.tll.TLLGame;
 import com.bladecoder.tll.util.DPIUtils;
 import com.bladecoder.tll.util.EngineLogger;
 
@@ -27,8 +26,6 @@ public class BlocksInputProcessor implements InputProcessor {
 
     private final IntSet pressedButtons = new IntSet();
 
-    private final TLLGame game;
-
     private boolean das;
 
     private int movedPointer;
@@ -46,9 +43,8 @@ public class BlocksInputProcessor implements InputProcessor {
     // soft drop set by axis
     private boolean axisSoftDrop;
 
-    public BlocksInputProcessor(TLLGame game, BlocksLogic blocksGame) {
+    public BlocksInputProcessor(BlocksLogic blocksGame) {
         this.blocksGame = blocksGame;
-        this.game = game;
 
         movedPointer = -1;
     }
@@ -184,7 +180,7 @@ public class BlocksInputProcessor implements InputProcessor {
             touchDownX = screenX;
             touchDownY = screenY;
             movedPointer = pointer;
-        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) > TOUCH_SCREEN_MOVE_DIST * 5) {
+        } else if(DPIUtils.pixelsToInches(touchDownY - screenY) > TOUCH_SCREEN_MOVE_DIST * 2) {
             if(blocksGame.isSoftDrop()) {
                 blocksGame.setSoftDrop(false);
             } else {

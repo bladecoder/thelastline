@@ -29,7 +29,7 @@ public class BlocksScreen implements Screen {
 
     public BlocksScreen(TLLGame game) {
         this.game = game;
-        inputProcessor = new BlocksInputProcessor(game, blocksLogic);
+        inputProcessor = new BlocksInputProcessor(blocksLogic);
     }
 
     @Override
