@@ -286,7 +286,7 @@ public class BlocksLogic {
 
         gameState.tetramino.next();
 
-        soundManager.musicPlay();
+        soundManager.musicPlay(gameState.level);
         gameState.paused = false;
     }
 
@@ -315,8 +315,10 @@ public class BlocksLogic {
     private void levelUp() {
         stateTimer = LINE_CLEAR_TIME;
         gameState.state = GameState.State.LEVEL_UP;
+        soundManager.musicStop();
         soundManager.levelUp();
         setLevel(gameState.level + 1);
+        soundManager.musicPlay(gameState.level);
     }
 
     private void setLevel(int level) {
@@ -376,7 +378,7 @@ public class BlocksLogic {
     public void resume() {
         if(gameState.paused) {
             gameState.paused = false;
-            soundManager.musicPlay();
+            soundManager.musicPlay(gameState.level);
         }
 
         gameState.paused = false;

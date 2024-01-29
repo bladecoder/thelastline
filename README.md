@@ -30,7 +30,6 @@ Useful links:
 ## Nice to have
 
 - [ ] Rotate right por touch screens
-- [ ] Music
 - [ ] Statistics screen
 - [ ] Lines for level up depends on level (see NES)
 - [ ] iOS version

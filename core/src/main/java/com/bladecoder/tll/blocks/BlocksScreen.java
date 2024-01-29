@@ -36,6 +36,14 @@ public class BlocksScreen implements Screen {
     public void show() {
         theme = Theme.THEMES[Config.getInstance().getPref("theme", 0)];
 
+        String music = Config.getInstance().getPref("music", "ON");
+
+        if(music.equals("ON")) {
+            soundManager.setMusic(true);
+        } else {
+            soundManager.setMusic(false);
+        }
+
         soundManager.load();
 
         blocksUI = new BlocksUI(game.getSkin(), game, blocksLogic, theme, viewport, batch);

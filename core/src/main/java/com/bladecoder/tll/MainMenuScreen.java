@@ -199,6 +199,28 @@ public class MainMenuScreen implements Screen {
         menuButtonTable.add(themeButton);
         menuButtonTable.row();
 
+        TextButton musicButton = new TextButton("Music " + Config.getInstance().getPref("music", "ON"), skin, "menu");
+        musicButton.getLabel().setAlignment(Align.center);
+        musicButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String music = Config.getInstance().getPref("music", "ON");
+
+                if(music.equals("ON"))
+                    music = "OFF";
+                else music = "ON";
+
+                musicButton.setText("Music " + music);
+                Config.getInstance().setPref("music", music);
+                Config.getInstance().savePrefs();
+
+                updateTheme();
+            }
+        });
+
+        menuButtonTable.add(musicButton);
+        menuButtonTable.row();
+
         TextButton quit = new TextButton("Exit", skin, "menu");
         quit.getLabel().setAlignment(Align.center);
         quit.addListener(new ClickListener() {
@@ -215,7 +237,7 @@ public class MainMenuScreen implements Screen {
         stage.addActor(menuButtonTable);
         stage.setKeyboardFocus(menuButtonTable);
 
-        menuGroup = new ButtonGroup<>( newGame, gameModeButton, level, themeButton, quit);
+        menuGroup = new ButtonGroup<>( newGame, gameModeButton, level, themeButton, musicButton, quit);
         menuGroup.setMinCheckCount(1);
 
         inputListener = new MainMenuInputListener(game, menuGroup);
