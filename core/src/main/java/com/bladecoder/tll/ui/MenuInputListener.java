@@ -1,4 +1,4 @@
-package com.bladecoder.tll;
+package com.bladecoder.tll.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,10 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.IntSet;
+import com.bladecoder.tll.TLLGame;
 import com.bladecoder.tll.util.EngineLogger;
 
 public class MenuInputListener extends InputListener  {
-    private final TLLGame game;
 
     private final IntSet pressedButtons = new IntSet();
 
@@ -23,8 +23,7 @@ public class MenuInputListener extends InputListener  {
     private final static float AXIS_DELAY = 0.4f;
     private float axisTime;
 
-    public MenuInputListener(TLLGame game, ButtonGroup<Button> menu) {
-        this.game = game;
+    public MenuInputListener(ButtonGroup<Button> menu) {
         this.menu = menu;
 
         selectButton(0);
@@ -34,14 +33,6 @@ public class MenuInputListener extends InputListener  {
     public boolean keyDown(InputEvent event, int keycode) {
 
         switch (keycode) {
-            case Input.Keys.ESCAPE:
-            case Input.Keys.BACK:
-            case Input.Keys.MENU:
-                if(!game.isPaused())
-                    Gdx.app.exit();
-                else
-                    game.setBlocksScreen();
-                return true;
             case  Input.Keys.UP:
                 up();
                 return true;
@@ -87,12 +78,10 @@ public class MenuInputListener extends InputListener  {
         }
     }
 
-    private void buttonUp(Controller controller, int buttonCode) {
+    protected void buttonUp(Controller controller, int buttonCode) {
         EngineLogger.debug(buttonCode + " gamepad button up.");
 
-        if (buttonCode == controller.getMapping().buttonStart) {
-            game.setBlocksScreen();
-        } else if (buttonCode == controller.getMapping().buttonA || buttonCode == controller.getMapping().buttonDpadRight) {
+        if (buttonCode == controller.getMapping().buttonA || buttonCode == controller.getMapping().buttonDpadRight) {
             click(false);
         } else if (buttonCode == controller.getMapping().buttonB || buttonCode == controller.getMapping().buttonDpadLeft) {
             click(true);

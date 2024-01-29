@@ -59,8 +59,8 @@ public class BlocksInputProcessor implements InputProcessor {
             case Input.Keys.ESCAPE:
             case Input.Keys.BACK:
             case Input.Keys.MENU:
+            case Input.Keys.P:
                 blocksGame.pause();
-                game.setMenuScreen();
                 break;
             case Input.Keys.LEFT:
                 moveTime = DAS_INITIAL_DELAY;
@@ -93,16 +93,12 @@ public class BlocksInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int i) {
-        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
-            blocksGame.newGame();
+        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN || blocksGame.isPaused()) {
             return false;
         }
 
         if (i == Input.Keys.DOWN) {
             blocksGame.setSoftDrop(false);
-        } else if (i == Input.Keys.P) {
-            if (blocksGame.isPaused()) blocksGame.resume();
-            else blocksGame.pause();
         }
 
         return false;
@@ -131,8 +127,7 @@ public class BlocksInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
-            blocksGame.newGame();
+        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN || blocksGame.isPaused()) {
             return true;
         }
 
@@ -318,13 +313,6 @@ public class BlocksInputProcessor implements InputProcessor {
 
         if (buttonCode == controller.getMapping().buttonStart) {
             blocksGame.pause();
-            game.setMenuScreen();
-
-            return;
-        }
-
-        if (blocksGame.getState() == GameState.State.GAME_OVER || blocksGame.getState() == GameState.State.WIN) {
-            blocksGame.newGame();
             return;
         }
 

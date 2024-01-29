@@ -21,7 +21,7 @@ import com.bladecoder.tll.blocks.Theme;
 import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.DPIUtils;
 
-public class MenuScreen implements Screen {
+public class MainMenuScreen implements Screen {
 
     private static final String[] THEMES = {"DEFAULT", "MONO", "SUNSET"};
 
@@ -30,7 +30,7 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private final Table menuButtonTable = new Table();
 
-    private MenuInputListener inputListener;
+    private MainMenuInputListener inputListener;
 
     private final TLLGame game;
 
@@ -42,7 +42,7 @@ public class MenuScreen implements Screen {
 
     private Label version;
 
-    public MenuScreen(TLLGame game) {
+    public MainMenuScreen(TLLGame game) {
         this.game = game;
     }
 
@@ -72,21 +72,6 @@ public class MenuScreen implements Screen {
 
         menuButtonTable.add(title).padBottom(DPIUtils.getMarginSize());
         menuButtonTable.row();
-
-        TextButton resumeGame = new TextButton("Resume", skin, "menu");
-
-        if(game.isPaused()) {
-            resumeGame.getLabel().setAlignment(Align.center);
-            resumeGame.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    game.setBlocksScreen();
-                }
-            });
-
-            menuButtonTable.add(resumeGame);
-            menuButtonTable.row();
-        }
 
         TextButton newGame = new TextButton("New Game", skin, "menu");
         newGame.getLabel().setAlignment(Align.center);
@@ -230,11 +215,10 @@ public class MenuScreen implements Screen {
         stage.addActor(menuButtonTable);
         stage.setKeyboardFocus(menuButtonTable);
 
-        menuGroup = game.isPaused() ? new ButtonGroup<>( resumeGame, newGame, gameModeButton, level, themeButton, quit) :
-                new ButtonGroup<>( newGame, gameModeButton, level, themeButton, quit);
+        menuGroup = new ButtonGroup<>( newGame, gameModeButton, level, themeButton, quit);
         menuGroup.setMinCheckCount(1);
 
-        inputListener = new MenuInputListener(game, menuGroup);
+        inputListener = new MainMenuInputListener(game, menuGroup);
         menuButtonTable.addListener(inputListener);
 
         version = new Label("v" + Config.getInstance().getProperty("version", "0") + " by Rafael García", skin, "default");

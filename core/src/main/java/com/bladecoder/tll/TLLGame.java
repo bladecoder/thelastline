@@ -1,25 +1,20 @@
 package com.bladecoder.tll;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.bladecoder.tll.blocks.BlocksLogic;
 import com.bladecoder.tll.blocks.BlocksScreen;
-import com.bladecoder.tll.blocks.GameState;
-import com.bladecoder.tll.blocks.Theme;
 import com.bladecoder.tll.ui.BladeSkin;
-import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.EngineLogger;
 
 public class TLLGame extends Game {
     private static final String SKIN_FILENAME = "ui.json";
     private BlocksScreen blocksScreen;
 
-    private MenuScreen menuScreen;
+    private MainMenuScreen menuScreen;
 
     private BladeSkin skin;
 
@@ -32,7 +27,7 @@ public class TLLGame extends Game {
         loadAssets();
 
         blocksScreen = new BlocksScreen(this);
-        menuScreen = new MenuScreen(this);
+        menuScreen = new MainMenuScreen(this);
 
         Gdx.input.setCatchKey(Input.Keys.MENU, true);
         Gdx.input.setCatchKey(Input.Keys.BACK, true);

@@ -33,7 +33,6 @@ Useful links:
 - [ ] Music
 - [ ] Statistics screen
 - [ ] Lines for level up depends on level (see NES)
-- [ ] Pause button in game screen
 - [ ] iOS version
 
 ## WON'T DO
