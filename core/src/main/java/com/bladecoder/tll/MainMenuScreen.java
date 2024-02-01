@@ -27,6 +27,8 @@ public class MainMenuScreen implements Screen {
 
     private static final String[] GAME_MODES = {"MARATHON", "SPRINT", "ULTRA"};
 
+    private static final String[] MUSIC_VOLUMES = {"OFF", "25%", "50%", "75%", "100%"};
+
     private Stage stage;
     private final Table menuButtonTable = new Table();
 
@@ -114,7 +116,7 @@ public class MainMenuScreen implements Screen {
         levelTable.defaults().pad(DPIUtils.getSpacing()).align(Align.center);
         TextButton level = new TextButton("Level " + Config.getInstance().getPref("startLevel", 1), skin, "menu");
 
-        TextButton levelDown = new TextButton(" <", skin, "menu");
+        TextButton levelDown = new TextButton("  <", skin, "menu");
         levelDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -154,7 +156,7 @@ public class MainMenuScreen implements Screen {
         });
         levelTable.add(level);
 
-        TextButton levelUp = new TextButton("> ", skin, "menu");
+        TextButton levelUp = new TextButton(">  ", skin, "menu");
         levelUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -199,19 +201,20 @@ public class MainMenuScreen implements Screen {
         menuButtonTable.add(themeButton);
         menuButtonTable.row();
 
-        TextButton musicButton = new TextButton("Music " + Config.getInstance().getPref("music", "ON"), skin, "menu");
+        TextButton musicButton = new TextButton("Music " + MUSIC_VOLUMES[Config.getInstance().getPref("music_volume", 4)], skin, "menu");
         musicButton.getLabel().setAlignment(Align.center);
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String music = Config.getInstance().getPref("music", "ON");
+                int musicVolume = Config.getInstance().getPref("music_volume", 4);
 
-                if(music.equals("ON"))
-                    music = "OFF";
-                else music = "ON";
+                if (musicVolume < 4)
+                    musicVolume = musicVolume + 1;
+                else musicVolume = 0;
 
+                String music = MUSIC_VOLUMES[musicVolume];
                 musicButton.setText("Music " + music);
-                Config.getInstance().setPref("music", music);
+                Config.getInstance().setPref("music_volume", musicVolume);
                 Config.getInstance().savePrefs();
 
                 updateTheme();

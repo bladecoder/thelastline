@@ -141,7 +141,10 @@ public class BlocksInputProcessor implements InputProcessor {
             return true;
         }
 
-        blocksGame.rotateRight();
+        if(screenX < Gdx.graphics.getWidth() / 2)
+            blocksGame.rotateLeft();
+        else
+            blocksGame.rotateRight();
 
         return true;
     }

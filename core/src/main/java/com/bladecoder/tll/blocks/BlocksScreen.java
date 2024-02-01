@@ -36,13 +36,9 @@ public class BlocksScreen implements Screen {
     public void show() {
         theme = Theme.THEMES[Config.getInstance().getPref("theme", 0)];
 
-        String music = Config.getInstance().getPref("music", "ON");
+        int musicVolume = Config.getInstance().getPref("music_volume", 4);
 
-        if(music.equals("ON")) {
-            soundManager.setMusic(true);
-        } else {
-            soundManager.setMusic(false);
-        }
+        soundManager.setGlobalMusicVolume(musicVolume * 0.25f);
 
         soundManager.load();
 

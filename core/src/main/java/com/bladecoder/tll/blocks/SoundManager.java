@@ -9,6 +9,8 @@ public class SoundManager {
     private final static String[] MUSIC_FILES = {"8bitmelody.mp3", "hauntedcastle.mp3", "newbattle.mp3"};
     private final static float[] MUSIC_VOLUMES = {0.3f, 0.3f, 0.9f};
 
+    private float globalMusicVolume = 1.0f;
+
     private Sound lockdownSound;
     private Sound rotateSound;
 
@@ -24,7 +26,6 @@ public class SoundManager {
     private Sound tetrisSound;
 
     private Music music;
-    private boolean musicEnabled = true;
 
     public void load() {
         lockdownSound = Gdx.audio.newSound(Gdx.files.internal("lockdown.wav"));
@@ -76,7 +77,7 @@ public class SoundManager {
 
     public void musicPlay(int level) {
 
-        if(!musicEnabled)
+        if(!isMusicEnabled())
             return;
 
         if(music != null) {
@@ -86,11 +87,13 @@ public class SoundManager {
 
         String musicFile;
 
-        musicFile = MUSIC_FILES[(level - 1) / 10];
+        int currentMusic = (level - 1) / 10;
+
+        musicFile = MUSIC_FILES[currentMusic];
 
         music = Gdx.audio.newMusic(Gdx.files.internal(musicFile));
 
-        music.setVolume(MUSIC_VOLUMES[(level - 1) / 10]);
+        music.setVolume(MUSIC_VOLUMES[currentMusic] * globalMusicVolume);
         music.setLooping(true);
         music.play();
     }
@@ -117,13 +120,11 @@ public class SoundManager {
         }
     }
 
-    public void setMusic(boolean enabled) {
-        musicEnabled = enabled;
+    private boolean isMusicEnabled() {
+        return globalMusicVolume > 0.0f;
+    }
 
-        if(!musicEnabled && music != null) {
-            music.stop();
-            music.dispose();
-            music = null;
-        }
+    public void setGlobalMusicVolume(float globalMusicVolume) {
+        this.globalMusicVolume = globalMusicVolume;
     }
 }
