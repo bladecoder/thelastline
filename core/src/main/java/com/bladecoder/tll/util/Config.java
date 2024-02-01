@@ -24,9 +24,7 @@ import java.util.Properties;
 
 public final class Config {
 
-	public static final String DEBUG_PROP = "debug";
 	public static final String VERSION_PROP = "version";
-	public static final String AUTO_HIDE_TEXTS = "auto_hide_texts";
 
 	public static final String PROPERTIES_FILENAME = "tll.properties";
 	public static final String PREFS_FILENAME = "prefs.properties";
