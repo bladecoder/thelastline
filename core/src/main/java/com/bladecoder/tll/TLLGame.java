@@ -22,6 +22,8 @@ public class TLLGame extends Game {
         return skin;
     }
 
+    private boolean isDisposed = false;
+
     @Override
     public void create() {
         loadAssets();
@@ -47,17 +49,24 @@ public class TLLGame extends Game {
         setScreen(blocksScreen);
     }
 
-    public boolean isPaused() {
-        return blocksScreen.isPaused();
-    }
-
     public void setPaused(boolean paused) {
         blocksScreen.setPaused(paused);
     }
 
     @Override
+    public void resume() {
+        if(isDisposed) {
+            loadAssets();
+            isDisposed = false;
+        }
+
+        super.resume();
+    }
+
+    @Override
     public void dispose() {
         skin.dispose();
+        isDisposed = true;
     }
 
     private void loadAssets() {
