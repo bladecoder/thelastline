@@ -12,10 +12,11 @@ After a couple of weeks, this is the result. I hope you enjoy it.
 
 ## Screenshots
 
-![Android screenshot](screenshots/screenshot1.jpg)
-![Desktop screenshot](screenshots/screenshot2.png)
-![Sunset theme](screenshots/screenshot3.png)
-![Mono theme](screenshots/screenshot4.png)
+<img src="screenshots/screenshot2.png" alt="Desktop screenshot" width="400"/>
+<img src="screenshots/screenshot3.png" alt="Sunset theme" width="400"/>
+<img src="screenshots/screenshot4.png" alt="Mono theme" width="400"/>
+</br>
+<img src="screenshots/screenshot1.jpg" alt="Android screenshot" width="160"/>
 
 ## Technical details
 
