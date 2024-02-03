@@ -49,7 +49,7 @@ public class BlocksUI {
 
         // PAUSE BUTTON
         Color buttonColor = theme.scoresTextColor.cpy();
-        buttonColor.a = 0.4f;
+        buttonColor.a = 0.35f;
 
         Drawable pauseDrawable = ((SpriteDrawable)skin.getDrawable("pause")).tint(buttonColor);
         Button.ButtonStyle pauseButtonStyle = new Button.ButtonStyle();
@@ -191,7 +191,7 @@ public class BlocksUI {
     }
 
     public void resize(int width, int height) {
-        pauseButton.setPosition(width - pauseButton.getWidth() - DPIUtils.getMarginSize(), height - pauseButton.getHeight() - DPIUtils.getMarginSize());
+        pauseButton.setPosition(width - pauseButton.getWidth() - DPIUtils.getMarginSize()/2, height - pauseButton.getHeight() - DPIUtils.getMarginSize()/2);
     }
 
     public InputProcessor getStage() {

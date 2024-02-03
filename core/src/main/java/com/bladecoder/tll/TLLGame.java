@@ -1,5 +1,6 @@
 package com.bladecoder.tll;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.bladecoder.tll.blocks.BlocksScreen;
 import com.bladecoder.tll.ui.BladeSkin;
 import com.bladecoder.tll.util.EngineLogger;
+import com.bladecoder.tll.util.RectangleRenderer;
 
 public class TLLGame extends Game {
     private static final String SKIN_FILENAME = "ui.json";
@@ -21,8 +23,6 @@ public class TLLGame extends Game {
     public BladeSkin getSkin() {
         return skin;
     }
-
-    private boolean isDisposed = false;
 
     @Override
     public void create() {
@@ -55,9 +55,8 @@ public class TLLGame extends Game {
 
     @Override
     public void resume() {
-        if(isDisposed) {
+        if(Gdx.app.getType() == Application.ApplicationType.Android) {
             loadAssets();
-            isDisposed = false;
         }
 
         super.resume();
@@ -66,7 +65,7 @@ public class TLLGame extends Game {
     @Override
     public void dispose() {
         skin.dispose();
-        isDisposed = true;
+        RectangleRenderer.dispose();
     }
 
     private void loadAssets() {
