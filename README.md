@@ -10,6 +10,10 @@ During the Christmas holidays of 2023 a boy named Blue Scutti beat the NES Tetri
 
 After a couple of weeks, this is the result. I hope you enjoy it.
 
+## Screenshots
+
+![Android screenshot](screenshots/screenshot1.png) ![Desktop screenshot](screenshots/screenshot2.png) ![Sunset theme](screenshots/screenshot3.png) ![Mono theme](screenshots/screenshot4.png)
+
 ## Technical details
 
 - Follow most of NES Tetris rules.
@@ -29,7 +33,6 @@ Useful links:
 
 ## Nice to have
 
-- [ ] Rotate right por touch screens
 - [ ] Statistics screen
 - [ ] Lines for level up depends on level (see NES)
 - [ ] iOS version
