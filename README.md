@@ -12,7 +12,10 @@ After a couple of weeks, this is the result. I hope you enjoy it.
 
 ## Screenshots
 
-![Android screenshot](screenshots/screenshot1.png) ![Desktop screenshot](screenshots/screenshot2.png) ![Sunset theme](screenshots/screenshot3.png) ![Mono theme](screenshots/screenshot4.png)
+![Android screenshot](screenshots/screenshot1.jpg)
+![Desktop screenshot](screenshots/screenshot2.png)
+![Sunset theme](screenshots/screenshot3.png)
+![Mono theme](screenshots/screenshot4.png)
 
 ## Technical details
 
