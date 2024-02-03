@@ -49,7 +49,7 @@ public class BlocksUI {
 
         // PAUSE BUTTON
         Color buttonColor = theme.scoresTextColor.cpy();
-        buttonColor.a = 0.3f;
+        buttonColor.a = 0.4f;
 
         Drawable pauseDrawable = ((SpriteDrawable)skin.getDrawable("pause")).tint(buttonColor);
         Button.ButtonStyle pauseButtonStyle = new Button.ButtonStyle();
