@@ -90,6 +90,7 @@ public class BlocksScreen implements Screen {
 
     @Override
     public void resume() {
+        blocksUI.hideMenu();
         blocksLogic.resume();
     }
 

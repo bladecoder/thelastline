@@ -169,7 +169,9 @@ public class BlocksUI {
         stage.setKeyboardFocus(pauseTable);
     }
 
-    private void hideMenu() {
+    public void hideMenu() {
+        if(pauseTable == null) return;
+
         stage.getRoot().removeActor(pauseTable);
         pauseTable = null;
         pauseButton.setVisible(true);
@@ -192,6 +194,10 @@ public class BlocksUI {
 
     public void resize(int width, int height) {
         pauseButton.setPosition(width - pauseButton.getWidth() - DPIUtils.getMarginSize()/2, height - pauseButton.getHeight() - DPIUtils.getMarginSize()/2);
+
+        if(pauseTable != null) {
+            pauseTable.setPosition((stage.getWidth() - pauseTable.getWidth()) / 2, (stage.getHeight() - pauseTable.getHeight()) / 2);
+        }
     }
 
     public InputProcessor getStage() {
