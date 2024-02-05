@@ -27,7 +27,6 @@ android {
     applicationId 'com.bladecoder.tll'
     minSdkVersion 19
     targetSdkVersion 34
-    versionCode 1
     versionName version
 
     if (project.hasProperty('versionCode'))
