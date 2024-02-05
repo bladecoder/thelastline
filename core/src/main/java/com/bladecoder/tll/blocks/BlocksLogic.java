@@ -1,7 +1,6 @@
 package com.bladecoder.tll.blocks;
 
 import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.async.AsyncTask;
 import com.bladecoder.tll.util.Config;
 
 public class BlocksLogic {
@@ -115,10 +114,10 @@ public class BlocksLogic {
                     }, 0f, 0.2f, removedRows - 1);
             }
 
-            if (removedRows == 1) gameState.points += 100 * gameState.level;
-            else if (removedRows == 2) gameState.points += 300 * gameState.level;
-            else if (removedRows == 3) gameState.points += 500 * gameState.level;
-            else gameState.points += 800 * gameState.level;
+            if (removedRows == 1) score(100 * gameState.level);
+            else if (removedRows == 2) score( 300 * gameState.level);
+            else if (removedRows == 3) score( 500 * gameState.level);
+            else score( 800 * gameState.level);
 
             if (gameState.gameMode == GameState.GameMode.MARATHON) {
                 // level up every 10 lines
@@ -141,16 +140,20 @@ public class BlocksLogic {
         }
     }
 
+    private void score(int points) {
+        gameState.points += points;
+
+        if (gameState.highScore < gameState.points) {
+            updateHighScore();
+        }
+    }
+
     private void updateFalling(float delta) {
         if (isGameOver()) {
             gameState.state = GameState.State.GAME_OVER;
             soundManager.youLose();
             soundManager.musicStop();
             return;
-        }
-
-        if (gameState.highScore < gameState.points) {
-            updateHighScore();
         }
 
         if (gameState.gameMode == GameState.GameMode.ULTRA && gameState.gameTime <= 0) {
@@ -171,7 +174,7 @@ public class BlocksLogic {
 
             if (gameState.playfield.canMoveDown(gameState.tetramino)) {
                 gameState.tetramino.moveDown();
-                if (softdrop) gameState.points += 1;
+                if (softdrop) score(1);
             } else {
                 lockDown();
             }
@@ -260,7 +263,7 @@ public class BlocksLogic {
 
         while (gameState.playfield.canMoveDown(gameState.tetramino)) {
             gameState.tetramino.moveDown();
-            gameState.points += 2;
+            score(2);
         }
 
         lockDown();
