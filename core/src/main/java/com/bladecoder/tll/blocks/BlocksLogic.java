@@ -126,15 +126,15 @@ public class BlocksLogic {
 
                     if (gameState.level > MAX_LEVEL) {
                         gameState.state = GameState.State.WIN;
+                        soundManager.youWin();
+                        soundManager.musicStop();
                     }
                 }
             } else if (gameState.gameMode == GameState.GameMode.SPRINT) {
                 if (gameState.lines >= 40) {
                     gameState.state = GameState.State.WIN;
-                }
-            } else if (gameState.gameMode == GameState.GameMode.ULTRA) {
-                if (gameState.lines >= 150) {
-                    gameState.state = GameState.State.WIN;
+                    soundManager.youWin();
+                    soundManager.musicStop();
                 }
             }
         }
