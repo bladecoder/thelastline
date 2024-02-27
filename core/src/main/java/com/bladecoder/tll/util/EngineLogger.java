@@ -23,7 +23,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 public class EngineLogger {
-	private static String TAG = "ENGINE";
+	private static final String TAG = "ENGINE";
 	private static int level = Application.LOG_ERROR;
 	private static final int MAX_BUFFER_SIZE = 512 * 1024;
 
