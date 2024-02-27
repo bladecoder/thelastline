@@ -216,8 +216,6 @@ public class MainMenuScreen implements Screen {
                 musicButton.setText("Music " + music);
                 Config.getInstance().setPref("music_volume", musicVolume);
                 Config.getInstance().savePrefs();
-
-                updateTheme();
             }
         });
 

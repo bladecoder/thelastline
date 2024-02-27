@@ -38,7 +38,10 @@ public class BlocksScreen implements Screen {
 
         int musicVolume = Config.getInstance().getPref("music_volume", 4);
 
-        soundManager.setGlobalMusicVolume(musicVolume * 0.25f);
+        // Set the music volume in logaritmic scale
+        float v = (float) ((Math.exp(musicVolume * 0.25f) - 1) / (Math.E - 1));
+
+        soundManager.setGlobalMusicVolume(v);
 
         soundManager.load();
 
