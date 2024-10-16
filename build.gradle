@@ -53,6 +53,7 @@ subprojects {
   ext.appName = 'thelastline'
   repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
   }
 }
 
