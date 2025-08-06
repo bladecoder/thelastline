@@ -5,17 +5,17 @@ if [ "$(uname)" == "Darwin" ]; then
 fi
 
 #ANDROID ICONS
-inkscape -w 192 -h 192 --export-area-page --export-filename=../../android/res/drawable-xxxhdpi/ic_launcher.png  icon.svg;
-inkscape -w 144 -h 144 --export-area-page --export-filename=../../android/res/drawable-xxhdpi/ic_launcher.png  icon.svg;
-inkscape -w 96 -h 96 --export-area-page --export-filename=../../android/res/drawable-xhdpi/ic_launcher.png  icon.svg;
-inkscape -w 72 -h 72 --export-area-page --export-filename=../../android/res/drawable-hdpi/ic_launcher.png  icon.svg;
-inkscape -w 48 -h 48 --export-area-page --export-filename=../../android/res/drawable-mdpi/ic_launcher.png  icon.svg;
+inkscape -w 192 -h 192 --export-area-page --export-filename=../../android/res/mipmap-xxxhdpi/ic_launcher.png  icon.svg;
+inkscape -w 144 -h 144 --export-area-page --export-filename=../../android/res/mipmap-xxhdpi/ic_launcher.png  icon.svg;
+inkscape -w 96 -h 96 --export-area-page --export-filename=../../android/res/mipmap-xhdpi/ic_launcher.png  icon.svg;
+inkscape -w 72 -h 72 --export-area-page --export-filename=../../android/res/mipmap-hdpi/ic_launcher.png  icon.svg;
+inkscape -w 48 -h 48 --export-area-page --export-filename=../../android/res/mipmap-mdpi/ic_launcher.png  icon.svg;
 
-#inkscape -w 432 -h 432 --export-area-page --export-filename=../../android/res/drawable-xxxhdpi/ic_launcher_foreground.png  icon_fg.svg;
-#inkscape -w 324 -h 324 --export-area-page --export-filename=../../android/res/drawable-xxhdpi/ic_launcher_foreground.png  icon_fg.svg;
-#inkscape -w 216 -h 216 --export-area-page --export-filename=../../android/res/drawable-xhdpi/ic_launcher_foreground.png  icon_fg.svg;
-#inkscape -w 162 -h 162 --export-area-page --export-filename=../../android/res/drawable-hdpi/ic_launcher_foreground.png  icon_fg.svg;
-#inkscape -w 108 -h 108 --export-area-page --export-filename=../../android/res/drawable-mdpi/ic_launcher_foreground.png  icon_fg.svg;
+#inkscape -w 432 -h 432 --export-area-page --export-filename=../../android/res/mipmap-xxxhdpi/ic_launcher_foreground.png  icon_fg.svg;
+#inkscape -w 324 -h 324 --export-area-page --export-filename=../../android/res/mipmap-xxhdpi/ic_launcher_foreground.png  icon_fg.svg;
+#inkscape -w 216 -h 216 --export-area-page --export-filename=../../android/res/mipmap-xhdpi/ic_launcher_foreground.png  icon_fg.svg;
+#inkscape -w 162 -h 162 --export-area-page --export-filename=../../android/res/mipmap-hdpi/ic_launcher_foreground.png  icon_fg.svg;
+#inkscape -w 108 -h 108 --export-area-page --export-filename=../../android/res/mipmap-mdpi/ic_launcher_foreground.png  icon_fg.svg;
 
 inkscape -w 512 -h 512 --export-area-page --export-filename=../../android/ic_launcher-web.png  icon.svg;
 
