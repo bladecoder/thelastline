@@ -68,7 +68,7 @@ public final class MultiFontBitmapFontData extends FreeTypeFontGenerator.FreeTyp
   public BitmapFont.Glyph getGlyph(char ch) {
     BitmapFont.Glyph glyph = super.getGlyph(ch);
 
-    if (glyph == null && fallBackBitmapFontData != null) {
+    if (glyph == null) {
       for (FreeTypeFontGenerator.FreeTypeBitmapFontData data : fallBackBitmapFontData) {
         glyph = data.getGlyph(ch);
         if (glyph != null) {
