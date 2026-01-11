@@ -6,10 +6,10 @@ buildscript {
 // using jpackage only works if the JDK version is 14 or higher.
 // your JAVA_HOME environment variable may also need to be a JDK with version 14 or higher.
     if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_14)) {
-      classpath "org.beryx:badass-runtime-plugin:1.13.0"
+      classpath "org.beryx:badass-runtime-plugin:2.0.1"
     }
     if(enableGraalNative == 'true') {
-      classpath "org.graalvm.buildtools.native:org.graalvm.buildtools.native.gradle.plugin:0.9.28"
+      classpath "org.graalvm.buildtools.native:org.graalvm.buildtools.native.gradle.plugin:0.10.6"
     }
   }
 }
@@ -21,7 +21,9 @@ else {
 }
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
-mainClassName = 'com.bladecoder.tll.lwjgl3.Lwjgl3Launcher'
+application {
+  mainClass = 'com.bladecoder.tll.lwjgl3.Lwjgl3Launcher'
+}
 eclipse.project.name = appName + '-lwjgl3'
 java.sourceCompatibility = 11
 java.targetCompatibility = 11
@@ -48,7 +50,7 @@ jar {
 // sets the name of the .jar file this produces to the name of the game or app.
   archiveFileName.set(jarName)
 // using 'lib' instead of the default 'libs' appears to be needed by jpackageimage.
-  destinationDirectory = file("${project.layout.buildDirectory.asFile.get().absolutePath}/lib")
+  destinationDirectory = file("${layout.buildDirectory.get().asFile.absolutePath}/lib")
 // the duplicatesStrategy matters starting in Gradle 7.0; this setting works.
   duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
   dependsOn configurations.runtimeClasspath
@@ -60,7 +62,7 @@ jar {
   }
 // setting the manifest makes the JAR runnable.
   manifest {
-    attributes 'Main-Class': project.mainClassName
+    attributes 'Main-Class': application.mainClass.get()
   }
 // this last step may help on some OSes that need extra instruction to make runnable JARs.
   doLast {
@@ -82,7 +84,7 @@ if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_14)) {
     modules.set([
         'jdk.unsupported'
     ])
-    distDir.set(file(project.layout.buildDirectory))
+    distDir.set(layout.buildDirectory.get().asFile)
     jpackage {
       imageName = appName
 // you can set this to false if you want to build an installer, or keep it as true to build just an app.
