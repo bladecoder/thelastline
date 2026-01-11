@@ -28,6 +28,7 @@ public final class Config {
 
 	public static final String PROPERTIES_FILENAME = "tll.properties";
 	public static final String PREFS_FILENAME = "prefs.properties";
+	public static final String PREF_SHADERS_ENABLED = "shaders_enabled";
 
 	public static final String USER_FOLDER = ".tll/";
 
@@ -110,11 +111,25 @@ public final class Config {
 		return result;
 	}
 
+	public boolean getPref(String name, boolean defaultValue) {
+		boolean result = defaultValue;
+
+		try {
+			result = Boolean.parseBoolean(prefs.getProperty(name, String.valueOf(defaultValue)));
+		} catch (Exception e) {
+		}
+
+		return result;
+	}
+
 	public void setPref(String name, String value) {
 		prefs.setProperty(name, value);
 	}
 	public void setPref(String name, int value) {
 		prefs.setProperty(name, value + "");
+	}
+	public void setPref(String name, boolean value) {
+		prefs.setProperty(name, String.valueOf(value));
 	}
 
 	public void savePrefs() {

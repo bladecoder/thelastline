@@ -222,6 +222,26 @@ public class MainMenuScreen implements Screen {
         menuButtonTable.add(musicButton);
         menuButtonTable.row();
 
+        boolean shadersEnabled = Config.getInstance().getPref(Config.PREF_SHADERS_ENABLED, true);
+        TextButton shadersButton = new TextButton("Shaders " + (shadersEnabled ? "ON" : "OFF"), skin, "menu");
+        shadersButton.getLabel().setAlignment(Align.center);
+        shadersButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean enabled = Config.getInstance().getPref(Config.PREF_SHADERS_ENABLED, true);
+                enabled = !enabled;
+
+                shadersButton.setText("Shaders " + (enabled ? "ON" : "OFF"));
+                Config.getInstance().setPref(Config.PREF_SHADERS_ENABLED, enabled);
+                Config.getInstance().savePrefs();
+
+                game.reloadShaders();
+            }
+        });
+
+        menuButtonTable.add(shadersButton);
+        menuButtonTable.row();
+
         TextButton quit = new TextButton("Exit", skin, "menu");
         quit.getLabel().setAlignment(Align.center);
         quit.addListener(new ClickListener() {
@@ -238,7 +258,7 @@ public class MainMenuScreen implements Screen {
         stage.addActor(menuButtonTable);
         stage.setKeyboardFocus(menuButtonTable);
 
-        menuGroup = new ButtonGroup<>( newGame, gameModeButton, level, themeButton, musicButton, quit);
+        menuGroup = new ButtonGroup<>( newGame, gameModeButton, level, themeButton, musicButton, shadersButton, quit);
         menuGroup.setMinCheckCount(1);
 
         inputListener = new MainMenuInputListener(game, menuGroup);
