@@ -30,6 +30,7 @@ public class MainMenuInputListener extends MenuInputListener {
     return super.keyDown(event, keycode);
   }
 
+  @Override
   protected void buttonUp(Controller controller, int buttonCode) {
     super.buttonUp(controller, buttonCode);
 
