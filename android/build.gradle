@@ -25,7 +25,7 @@ android {
   }
   defaultConfig {
     applicationId 'com.bladecoder.tll'
-    minSdkVersion 19
+    minSdkVersion 21
     targetSdkVersion 35
     versionName version
 
