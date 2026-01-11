@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
   namespace "com.bladecoder.tll"
-  compileSdk 34
+  compileSdk 35
   sourceSets {
     main {
       manifest.srcFile 'AndroidManifest.xml'
@@ -26,7 +26,7 @@ android {
   defaultConfig {
     applicationId 'com.bladecoder.tll'
     minSdkVersion 19
-    targetSdkVersion 34
+    targetSdkVersion 35
     versionName version
 
     if (project.hasProperty('versionCode'))
