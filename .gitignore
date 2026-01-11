@@ -31,3 +31,8 @@ build/
 android/libs
 
 local.properties
+
+.project
+.settings
+.classpath
+bin/
