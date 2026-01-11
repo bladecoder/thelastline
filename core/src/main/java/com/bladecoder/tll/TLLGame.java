@@ -16,6 +16,7 @@ import com.bitfire.postprocessing.filters.CrtScreen;
 import com.bitfire.utils.ShaderLoader;
 import com.bladecoder.tll.blocks.BlocksScreen;
 import com.bladecoder.tll.ui.BladeSkin;
+import com.bladecoder.tll.util.Config;
 import com.bladecoder.tll.util.EngineLogger;
 import com.bladecoder.tll.util.RectangleRenderer;
 
@@ -29,9 +30,26 @@ public class TLLGame extends Game {
 
     private PostProcessor postProcessor;
     private CrtMonitor crt;
+    private boolean shadersEnabled = true;
+
+
+
 
     public BladeSkin getSkin() {
         return skin;
+    }
+
+    public void reloadShaders() {
+        boolean enabled = Config.getInstance().getPref(Config.PREF_SHADERS_ENABLED, true);
+
+        if(enabled) {
+            shadersEnabled = true;
+            setupPostprocessor();
+            return;
+        }
+
+        shadersEnabled = false;
+        disposePostprocessor();
     }
 
     @Override
@@ -65,6 +83,11 @@ public class TLLGame extends Game {
 
     @Override
     public void render () {
+        if(!shadersEnabled || postProcessor == null) {
+            super.render();
+            return;
+        }
+
         float delta = Gdx.graphics.getDeltaTime();
         crt.setTime(delta);
         postProcessor.capture();
@@ -72,13 +95,17 @@ public class TLLGame extends Game {
         postProcessor.render();
     }
 
+
+
     @Override
     public void resume() {
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             loadAssets();
         }
 
-        postProcessor.rebind();
+        if(postProcessor != null) {
+            postProcessor.rebind();
+        }
 
         super.resume();
     }
@@ -87,17 +114,29 @@ public class TLLGame extends Game {
     public void dispose() {
         skin.dispose();
         RectangleRenderer.dispose();
-        postProcessor.dispose();
+
+        if(postProcessor != null) {
+            postProcessor.dispose();
+        }
     }
 
     private void loadAssets() {
+        shadersEnabled = Config.getInstance().getPref(Config.PREF_SHADERS_ENABLED, true);
+
         FileHandle skinFile = Gdx.files.internal(SKIN_FILENAME);
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(SKIN_FILENAME.substring(0, SKIN_FILENAME.lastIndexOf('.')) + ".atlas"));
         skin = new BladeSkin(skinFile, atlas);
-        setupPostprocessor();
+
+        if(shadersEnabled) {
+            setupPostprocessor();
+        } else {
+            disposePostprocessor();
+        }
     }
 
     private void setupPostprocessor() {
+        disposePostprocessor();
+
         ShaderLoader.BasePath = "shaders/";
         //boolean isDesktop = Gdx.app.getType() == Application.ApplicationType.Desktop;
         postProcessor = new PostProcessor( false, false, true );
@@ -123,5 +162,14 @@ public class TLLGame extends Game {
 
         Bloom bloom = new Bloom( (int)(Gdx.graphics.getWidth() * 0.25f), (int)(Gdx.graphics.getHeight() * 0.25f) );
         postProcessor.addEffect( bloom );
+    }
+
+    private void disposePostprocessor() {
+        if(postProcessor != null) {
+            postProcessor.dispose();
+            postProcessor = null;
+        }
+
+        crt = null;
     }
 }
